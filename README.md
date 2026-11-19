@@ -1,349 +1,176 @@
-# 📄 FinGrid Dynamic Document Engine & eSign Pipeline
+# ⚡ FinGrid Dynamic Document Engine & Underwriting Pipeline
 
-> High-throughput, template-driven document generation and multi-party eSign orchestration designed for modern fintech lending platforms.
+<p align="center">
+  <img src="https://img.shields.io/badge/FinGrid-Flagship_Project-1e3a8a?style=for-the-badge&logo=shield&logoColor=white" alt="FinGrid Flagship" />
+  <img src="https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Node.js-22+-green?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Tests-29%2F29_Passing-brightgreen?style=for-the-badge&logo=vitest&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/License-Apache_2.0-orange?style=for-the-badge" alt="License" />
+</p>
 
----
-
-## 💡 The Problem
-
-In lending platforms like **FinGrid**, teams frequently end up writing bespoke code every time a new document or report is required (Credit Appraisal Memos, Balance Sheets, Profit & Loss extracts, No Objection Certificates, Sanction Letters).
-
-This leads to:
-* **Fragile codebase**: Business/legal layout tweaks require code refactors and deployments.
-* **Inconsistent styling**: Misaligned pagination, broken page breaks, and unformatted financial figures.
-* **Complex eSign flows**: Hardcoded coordinate calculations for signatures across different providers.
-
-## 🚀 The Solution: FinGrid Dynamic Document Engine
-
-FinGrid Document Engine completely decouples **Document Definition (Templates + JSON Schema)** from **Generation, Underwriting & eSign Delivery**:
-1. **Zero-Code Template Addition**: Create a Handlebars/HTML template and drop it into `templates/`—the engine automatically discovers it and registers routes.
-2. **Built-in Financial Helpers**: Native support for Indian Numbering System (`₹25,00,000.00`), Lakhs/Crores Number-to-Words (`Twenty-Five Lakh Rupees Only`), financial ratios (DSCR, Debt/Equity), and comparative YoY trends.
-3. **Internalized Bureau Engine & Underwriting Scorecard**: Direct adapters for **TransUnion CIBIL** and **Experian** with legacy 36-month DPD string parsing, leverage aggregation, derogatory flag knockouts, and automatic CAM report hydration.
-4. **In-House Bank Statement Analysis (BSA)**: Complete replacement for Glib.ai/Perfios with Indian banking narration regex classification, Average Monthly Balance (AMB) computation, inward/outward bounce detection, un-reported loan discovery, and automatic CAM Section 6 auto-hydration.
-5. **ITR & GSTR-3B Financial Intelligence & 3-Way Triangulation**: Multi-year ITR analysis (PBT, cash accruals, Section 139 filing discipline), 12-month GSTR-3B Table 3.1a outward supplies & Table 6.1 cash tax ratios, and automated 3-way reconciliation (GST vs Banking vs ITR) to detect circular trading and revenue inflation.
-6. **Print-Perfect Rendering**: Native `@page` support, custom headers/footers, dynamic page numbering (`Page X of Y`), and watermarks.
-7. **Pluggable eSign Gateway**: Unified interface supporting **Aadhaar eSign (Digio, Leegality)**, **DocuSign**, and a **Built-in Mock Provider** for zero-cost local testing.
-8. **Smart Anchor Detection**: Scans for visual/text anchors (`[[sig:signer_role:width:height]]`) without requiring manual coordinate calculations.
+<p align="center">
+  <strong>High-throughput, template-driven financial document generation, multi-party eSign orchestration, in-house Bank Statement Analysis (BSA), Credit Bureau (CIBIL/Experian) scoring, and Tax (ITR/GSTR-3B) Triangulation for modern digital lending platforms.</strong>
+</p>
 
 ---
 
-## 🏛️ Architecture
+## 🌟 The Core Value Proposition: Why This Replaces Multiple SaaS Tools
+
+In financial lending operations, platforms typically pay hundreds of thousands of dollars per year to 4-5 fragmented SaaS vendors:
+1. **Document Generators**: Paying per-page PDF generation APIs (hardcoding layouts in backend code).
+2. **eSign Platforms**: Separate integrations for Aadhaar eSign (Digio/Leegality) and global DSC/DocuSign.
+3. **Bank Statement Analyzers (BSA)**: Paying ₹15 to ₹50 per statement to vendors like **Glib.ai**, **Perfios**, or **Karza**.
+4. **Bureau Aggregators**: Paying SaaS markups on CIBIL & Experian raw XML pulls.
+5. **Tax Aggregators**: Separate tools to check GSTR-3B monthly sales and ITR filing compliance.
+
+**FinGrid Document & Underwriting Engine unifies all five pillars into a single self-hosted microservice:**
+
+```
+┌───────────────────────────────────────────────────────────────────────────────────────┐
+│                           FINGRID UNIFIED UNDERWRITING ENGINE                         │
+└───────────────────────────────────────────┬───────────────────────────────────────────┘
+                                            │
+        ┌───────────────────┬───────────────┴───────────────┬───────────────────┐
+        ▼                   ▼                               ▼                   ▼
+┌───────────────┐   ┌───────────────┐               ┌───────────────┐   ┌───────────────┐
+│ Dynamic Docs  │   │  Multi-Party  │               │ In-House BSA  │   │ Bureau & Tax  │
+│  & PDF Engine │   │ eSign Gateway │               │ (Glib AI Alt) │   │ Triangulation │
+├───────────────┤   ├───────────────┤               ├───────────────┤   ├───────────────┤
+│• CAM Reports  │   │• Aadhaar eSign│               │• AMB / ABB    │   │• CIBIL & Exp  │
+│• P&L Extracts │   │• Digio API    │               │• Outward Bnc  │   │• 36-Month DPD │
+│• Loan Closure │   │• Leegality    │               │• EOD Balances │   │• GSTR-3B (3.1)│
+│• KFS Sanction │   │• DocuSign     │               │• Loan Detect  │   │• ITR (3-Yr)   │
+│• Print CSS @pg│   │• Mock Dev Sim │               │• Top Debtors  │   │• 3-Way Recon  │
+└───────────────┘   └───────────────┘               └───────────────┘   └───────────────┘
+```
+
+---
+
+## 🏛️ End-to-End Underwriting & Generation Flow
 
 ```mermaid
-flowchart LR
-    subgraph Input
-        A[JSON Payload] --> B[Zod Schema Validator]
+flowchart TD
+    subgraph 1. Borrower Data Ingestion
+        A[Borrower Application Payload] --> B[Zod Schema Validation]
+        C[Bank Statement PDF / AA JSON] --> D[src/bsa/analyzer.ts]
+        E[CIBIL / Experian Credit Pull] --> F[src/bureau/analyzer.ts]
+        G[ITR 3-Year & GSTR-3B 12-Month] --> H[src/tax/triangulator.ts]
     end
 
-    subgraph Engine
-        B --> C[Template Loader & Merger]
-        T[(Template Store<br/>CAM, P&L, NOC)] --> C
-        C --> D[HTML Print Renderer]
+    subgraph 2. Financial Intelligence & Forensic Analysis
+        D -->|AMB, Outward Bounces, EMI Detection| BSA_METRICS[BSA Banking Scorecard]
+        F -->|36-Month DPD, CMR Rank, Leverage| BUREAU_METRICS[Bureau Risk Scorecard]
+        H -->|3-Way Turnover Reconciliation| TRI_METRICS[Tax Triangulation Radar]
+        
+        BSA_METRICS & BUREAU_METRICS & TRI_METRICS --> DECISION{Underwriting Decision<br/>APPROVE / REJECT / DEVIATION}
     end
 
-    subgraph Output & Sign
-        D --> E{Gotenberg / Headless PDF}
-        E --> F[PDF Generator]
-        F --> G[Anchor Tag Detector]
-        G --> H[eSign Orchestrator]
-        H --> I[Digio / Leegality / DocuSign / Mock]
+    subgraph 3. Dynamic Document Hydration
+        DECISION -->|Auto-Hydrate Data| TPL[Handlebars Template Merger]
+        TPL --> DOC1[Credit Appraisal Memo - CAM]
+        TPL --> DOC2[Bank Statement Analysis Report]
+        TPL --> DOC3[Profit & Loss Audited Extract]
+        TPL --> DOC4[Key Fact Statement & Sanction Letter]
+        TPL --> DOC5[Loan Account Closure NOC]
+    end
+
+    subgraph 4. High-Fidelity Rendering & eSign Ceremony
+        DOC1 & DOC2 & DOC3 & DOC4 & DOC5 --> RENDER[Gotenberg / Chromium Vector PDF]
+        RENDER --> ANCHOR[Smart Anchor Parser: [[sig:...]]]
+        ANCHOR --> ESIGN[eSign Orchestrator]
+        ESIGN --> SIGNED[(Tamper-Proof Storage & Audit Trail)]
     end
 ```
 
 ---
 
-## 📁 Project Structure
+## 🚀 Key Feature Matrix
 
-```
-fingrid-doc-engine/
-├── src/
-│   ├── index.ts                 # Express Server & Health API
-│   ├── cli.ts                   # Terminal CLI for fast local generation
-│   ├── config.ts                # Environment configurations
-│   ├── engine/
-│   │   ├── template-loader.ts   # Auto-discovery & in-memory caching
-│   │   ├── renderer.ts          # Handlebars data binding & metadata injection
-│   │   ├── helpers.ts           # Financial helpers registration
-│   │   └── pdf-generator.ts     # Gotenberg & headless PDF adapter
-│   ├── esign/
-│   │   ├── types.ts             # Signer & workflow schemas
-│   │   ├── anchor-parser.ts     # [[sig:...]] token detector
-│   │   ├── orchestrator.ts      # Multi-provider lifecycle state machine
-│   │   └── providers/
-│   │       ├── base.ts          # Common abstract provider
-│   │       ├── mock.ts          # Zero-config simulation provider
-│   │       ├── digio.ts         # Digio Aadhaar eSign & DSC
-│   │       ├── leegality.ts     # Leegality e-Stamping & eSign
-│   │       └── docusign.ts      # DocuSign REST API
-│   ├── schemas/                 # Zod validation schemas
-│   │   ├── cam-report.schema.ts
-│   │   ├── profit-and-loss.schema.ts
-│   │   ├── loan-closure.schema.ts
-│   │   └── sanction-letter.schema.ts
-│   └── routes/                  # REST API endpoints
-│       ├── document.routes.ts
-│       ├── esign.routes.ts
-│       └── template.routes.ts
-├── templates/                   # Reusable document templates
-│   ├── partials/                # styles.hbs, header.hbs, footer.hbs, watermark.hbs
-│   ├── cam-report/              # Credit Appraisal Memo template & sample data
-│   ├── profit-and-loss/         # Comparative P&L template & sample data
-│   ├── loan-closure/            # Loan Closure & NOC Certificate
-│   └── sanction-letter/         # Key Fact Statement & Sanction Letter
-├── tests/                       # Unit & integration test suite
-├── Dockerfile                   # Production container definition
-├── docker-compose.yml           # Preconfigured with Gotenberg Chromium
-└── package.json
-```
+| Capability | What FinGrid Delivers | Replaces / Competes With |
+| :--- | :--- | :--- |
+| **Document Generation** | Dynamic Handlebars templates, print CSS `@page`, watermarks, headers/footers, and page numbers. Zero code deployments for new document layouts. | Bespoke PDF backend code, Adobe Document Services |
+| **Bank Statement Analysis** | In-house transaction categorization, AMB/ABB computation, EOD milestone balances (5th, 10th, 15th, 20th), outward bounce radar, un-reported loan discovery. | **Glib.ai**, Perfios, Finfort, ScoreMe |
+| **Bureau Analytics** | Direct TransUnion CIBIL & Experian adapters, 36-month DPD string decoder (`000`, `030`, `SMA`, `NPA`), CMR ranking, knockout derogatory rules. | Aggregator SaaS wrappers, expensive Bureau per-hit fees |
+| **Tax & GST Triangulation** | GSTR-3B Table 3.1 outward supplies, Table 6.1 cash tax ratio, multi-year ITR CAGR & cash accruals, 3-way variance verification. | Karza, Manual Underwriting Spreadsheets |
+| **eSign Pipeline** | Pluggable interface for Aadhaar eSign (Digio, Leegality), Class 3 USB DSC, DocuSign, and zero-cost local Mock Simulator. | Standalone eSign portals, Leegality dashboard |
 
 ---
 
 ## ⚡ Quickstart
 
-### 1. Install Dependencies
+### 1. Installation
 ```bash
+git clone https://github.com/saravanan-22/fingrid-doc-engine.git
+cd fingrid-doc-engine
 npm install
 ```
 
-### 2. Run Tests
+### 2. Run All Tests (29/29 Passing)
 ```bash
 npm test
+# ✔ Core Document Engine & Helpers (11 tests)
+# ✔ Bank Statement Analysis & DPD (7 tests)
+# ✔ ITR, GSTR-3B & Triangulation (6 tests)
+# ✔ Bureau Engine & Scoring (5 tests)
 ```
 
-### 3. Generate Documents via CLI
-Generate any document instantly without starting a server:
-
+### 3. Generate Sample Documents Locally
+Run the end-to-end demo runner to generate all financial reports and simulate eSign workflows:
 ```bash
-# List all discovered templates
-npx tsx src/cli.ts list
-
-# Generate CAM Report HTML from sample data
-npx tsx src/cli.ts generate --template cam-report --out cam-output.html
-
-# Generate Loan Closure NOC
-npx tsx src/cli.ts generate --template loan-closure --out loan-closure.html
-
-# Generate with custom data payload
-npx tsx src/cli.ts generate --template profit-and-loss --data my-data.json --out pl.html
+npx tsx examples/e2e-demo.ts
 ```
+Generated reports are saved in `./output`:
+* `output/cam-report-sample.html` (Credit Appraisal Memo)
+* `output/bank-analysis-report-sample.html` (Institutional BSA with EOD Milestones)
+* `output/profit-and-loss-sample.html` (Audited P&L Statement)
+* `output/loan-closure-sample.html` (Loan Account Close NOC)
+* `output/sanction-letter-sample.html` (KFS & Sanction Letter)
 
-### 4. Start the REST API Microservice
+### 4. Start the Microservice
 ```bash
 npm run dev
-```
-Server starts at `http://localhost:4000/api/v1`.
-
----
-
-## 📡 REST API Reference
-
-### 1. List Available Templates
-```http
-GET /api/v1/templates
-```
-
-### 2. Render Document HTML
-```http
-POST /api/v1/documents/render
-Content-Type: application/json
-
-{
-  "templateId": "cam-report",
-  "data": { ... },
-  "options": {
-    "isDraft": false,
-    "watermark": ""
-  }
-}
-```
-
-### 3. Generate PDF
-```http
-POST /api/v1/documents/generate-pdf
-Content-Type: application/json
-
-{
-  "templateId": "loan-closure",
-  "data": { ... }
-}
-```
-
-### 4. Initiate eSign Workflow
-```http
-POST /api/v1/esign/initiate
-Content-Type: application/json
-
-{
-  "templateId": "sanction-letter",
-  "data": { ... },
-  "signers": [ ... ]
-}
-```
-
-### 5. Bureau Fetch & Underwriting Analytics
-```http
-POST /api/v1/bureau/analyze
-Content-Type: application/json
-
-{
-  "name": "Acme Technologies Pvt Ltd",
-  "pan": "AABCA8741E",
-  "entityType": "COMMERCIAL",
-  "provider": "CIBIL"
-}
-```
-
-### 6. Auto-Hydrate CAM Bureau Section
-```http
-POST /api/v1/bureau/cam-bridge
-Content-Type: application/json
-
-{
-  "name": "Apex Precision Engineering Pvt Ltd",
-  "pan": "AABCA8741E"
-}
-```
-
-### 7. Bank Statement Analysis (BSA - Glib.ai Replacement)
-```http
-POST /api/v1/bsa/analyze
-Content-Type: application/json
-
-{
-  "bankName": "HDFC Bank Ltd",
-  "accountNumberMasked": "XXXXXX9012"
-}
-```
-
-### 8. Auto-Hydrate CAM Banking Section (Section 6)
-```http
-POST /api/v1/bsa/cam-bridge
-Content-Type: application/json
-
-{
-  "bankName": "HDFC Bank Ltd",
-  "accountNumberMasked": "XXXXXX9012"
-}
-```
-
-### 9. Multi-Year ITR Analysis
-```http
-POST /api/v1/tax/itr/analyze
-Content-Type: application/json
-
-{
-  "pan": "AABCA8741E",
-  "entityName": "Apex Precision Engineering Pvt Ltd"
-}
-```
-
-### 10. GSTR-3B 12-Month Outward Supplies & Compliance
-```http
-POST /api/v1/tax/gstr3b/analyze
-Content-Type: application/json
-
-{
-  "gstin": "27AABCA8741E1Z3",
-  "entityName": "Apex Precision Engineering Pvt Ltd"
-}
-```
-
-### 11. Three-Way Triangulation (GST vs Banking vs ITR)
-```http
-POST /api/v1/tax/triangulate
-Content-Type: application/json
-
-{
-  "borrowerPan": "AABCA8741E",
-  "entityName": "Apex Precision Engineering Pvt Ltd",
-  "comparisonPeriod": "FY 2024-25",
-  "bankingTurnoverAnnualized": 282000000,
-  "gstTurnoverAnnualized": 285000000,
-  "itrGrossTurnover": 285000000
-}
+# Server running at http://localhost:4000/api/v1
 ```
 
 ---
 
-## ✍️ How to Add a New Document Template (Zero Backend Code)
+## 📡 Complete REST API Guide
 
-To add a new document type (e.g. `repayment-schedule` or `board-resolution`):
+### 1. Document Generation
+* `GET /api/v1/templates` — List all discovered document templates.
+* `POST /api/v1/documents/render` — Render dynamic document HTML with anchor detection.
+* `POST /api/v1/documents/generate-pdf` — Render vector PDF via Gotenberg container.
 
-1. **Create Directory**:
-   ```bash
-   mkdir -p templates/repayment-schedule
-   ```
-2. **Create `template.hbs`**:
-   ```html
-   <!DOCTYPE html>
-   <html>
-   <head>{{> styles }}</head>
-   <body>
-     {{> watermark }}
-     <div class="page">
-       {{> header }}
-       <div class="doc-title-banner">
-         <div class="doc-title">Repayment Schedule</div>
-       </div>
-       
-       <!-- Content & Tables using Handlebars -->
-       <p>Loan Amount: {{formatINR loanAmount}}</p>
-       
-       <!-- Add signature anchor -->
-       {{esignAnchor "borrower" "BORROWER SIGNATURE"}}
-       
-       {{> footer }}
-     </div>
-   </body>
-   </html>
-   ```
-3. **Drop a `sample-data.json`**:
-   The engine will **instantly detect it** in `/api/v1/templates` and CLI without rebuilding or adding code!
+### 2. eSign Pipeline
+* `POST /api/v1/esign/initiate` — Create multi-party signing session (Aadhaar/DSC/DocuSign/Mock).
+* `GET /api/v1/esign/status/:esignId` — Check live signing progress across signers.
+* `POST /api/v1/esign/webhook` — Webhook handler for tamper-proof audit trail.
 
----
+### 3. Bank Statement Analysis (Glib.ai Replacement)
+* `POST /api/v1/bsa/analyze` — Analyze raw transactions: AMB, DPD, Bounces, EOD balances.
+* `POST /api/v1/bsa/cam-bridge` — Auto-hydrate Section 6 of the CAM Report.
 
-## 🔒 eSign Integration Details
+### 4. Credit Bureau Engine
+* `POST /api/v1/bureau/analyze` — Analyze CIBIL/Experian report: 36m DPD, CMR rank, knockouts.
+* `POST /api/v1/bureau/cam-bridge` — Auto-hydrate Section 4 of the CAM Report.
 
-### Signature Anchors
-Templates place invisible anchors using the syntax:
-```html
-[[sig:signer_identifier:width:height]]
-```
-* The anchor parser extracts these positions automatically.
-* When sending to Digio, Leegality, or DocuSign, these tokens are passed so signatures appear precisely where designated on the document.
-
-### Supported eSign Providers
-
-| Provider | Target Market | Signature Capabilities |
-| :--- | :--- | :--- |
-| **MOCK** | Local Dev / CI | In-browser test signing ceremony, instant verification |
-| **DIGIO** | India Banking / NBFC | Aadhaar OTP eSign, Biometric eSign, Class 3 USB DSC |
-| **LEEGALITY** | India Legal / Lending | Digital Stamping (e-Stamp) + Aadhaar eSign |
-| **DOCUSIGN** | Global / Enterprise | DocuSign Envelopes API, Click-to-Sign |
+### 5. Tax & GST Triangulation
+* `POST /api/v1/tax/itr/analyze` — 3-year ITR CAGR, cash accruals, Section 139 discipline.
+* `POST /api/v1/tax/gstr3b/analyze` — 12-month GSTR-3B outward supplies & cash tax ratio.
+* `POST /api/v1/tax/triangulate` — Reconcile Banking vs GST vs ITR to detect circular turnover.
 
 ---
 
 ## 🐳 Docker Deployment
 
-Run both the Document Engine and the Gotenberg Chromium microservice:
-
+Run both the FinGrid Engine and the Gotenberg Chromium rendering engine with a single command:
 ```bash
 docker-compose up --build -d
 ```
-* Document Engine: `http://localhost:4000`
-* Gotenberg Chromium Engine: `http://localhost:3000`
+* **FinGrid Document Engine**: `http://localhost:4000`
+* **Gotenberg Chromium Microservice**: `http://localhost:3000`
 
 ---
 
-## 🐙 Sync to GitHub
-
-Your local git repository is initialized on `main`. To push to your GitHub account:
-
-```bash
-# 1. Add your remote repository (create fingrid-doc-engine on GitHub first)
-git remote add origin https://github.com/saravanan-22/fingrid-doc-engine.git
-
-# 2. Push to main branch
-git branch -M main
-git push -u origin main
-```
+## 📄 License
+Licensed under the [Apache-2.0 License](LICENSE). Built for enterprise digital lending infrastructure.
