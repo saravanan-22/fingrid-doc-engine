@@ -20,9 +20,10 @@ FinGrid Document Engine completely decouples **Document Definition (Templates + 
 2. **Built-in Financial Helpers**: Native support for Indian Numbering System (`₹25,00,000.00`), Lakhs/Crores Number-to-Words (`Twenty-Five Lakh Rupees Only`), financial ratios (DSCR, Debt/Equity), and comparative YoY trends.
 3. **Internalized Bureau Engine & Underwriting Scorecard**: Direct adapters for **TransUnion CIBIL** and **Experian** with legacy 36-month DPD string parsing, leverage aggregation, derogatory flag knockouts, and automatic CAM report hydration.
 4. **In-House Bank Statement Analysis (BSA)**: Complete replacement for Glib.ai/Perfios with Indian banking narration regex classification, Average Monthly Balance (AMB) computation, inward/outward bounce detection, un-reported loan discovery, and automatic CAM Section 6 auto-hydration.
-5. **Print-Perfect Rendering**: Native `@page` support, custom headers/footers, dynamic page numbering (`Page X of Y`), and watermarks.
-6. **Pluggable eSign Gateway**: Unified interface supporting **Aadhaar eSign (Digio, Leegality)**, **DocuSign**, and a **Built-in Mock Provider** for zero-cost local testing.
-7. **Smart Anchor Detection**: Scans for visual/text anchors (`[[sig:signer_role:width:height]]`) without requiring manual coordinate calculations.
+5. **ITR & GSTR-3B Financial Intelligence & 3-Way Triangulation**: Multi-year ITR analysis (PBT, cash accruals, Section 139 filing discipline), 12-month GSTR-3B Table 3.1a outward supplies & Table 6.1 cash tax ratios, and automated 3-way reconciliation (GST vs Banking vs ITR) to detect circular trading and revenue inflation.
+6. **Print-Perfect Rendering**: Native `@page` support, custom headers/footers, dynamic page numbering (`Page X of Y`), and watermarks.
+7. **Pluggable eSign Gateway**: Unified interface supporting **Aadhaar eSign (Digio, Leegality)**, **DocuSign**, and a **Built-in Mock Provider** for zero-cost local testing.
+8. **Smart Anchor Detection**: Scans for visual/text anchors (`[[sig:signer_role:width:height]]`) without requiring manual coordinate calculations.
 
 ---
 
@@ -222,6 +223,43 @@ Content-Type: application/json
 {
   "bankName": "HDFC Bank Ltd",
   "accountNumberMasked": "XXXXXX9012"
+}
+```
+
+### 9. Multi-Year ITR Analysis
+```http
+POST /api/v1/tax/itr/analyze
+Content-Type: application/json
+
+{
+  "pan": "AABCA8741E",
+  "entityName": "Apex Precision Engineering Pvt Ltd"
+}
+```
+
+### 10. GSTR-3B 12-Month Outward Supplies & Compliance
+```http
+POST /api/v1/tax/gstr3b/analyze
+Content-Type: application/json
+
+{
+  "gstin": "27AABCA8741E1Z3",
+  "entityName": "Apex Precision Engineering Pvt Ltd"
+}
+```
+
+### 11. Three-Way Triangulation (GST vs Banking vs ITR)
+```http
+POST /api/v1/tax/triangulate
+Content-Type: application/json
+
+{
+  "borrowerPan": "AABCA8741E",
+  "entityName": "Apex Precision Engineering Pvt Ltd",
+  "comparisonPeriod": "FY 2024-25",
+  "bankingTurnoverAnnualized": 282000000,
+  "gstTurnoverAnnualized": 285000000,
+  "itrGrossTurnover": 285000000
 }
 ```
 
