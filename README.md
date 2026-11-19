@@ -19,9 +19,10 @@ FinGrid Document Engine completely decouples **Document Definition (Templates + 
 1. **Zero-Code Template Addition**: Create a Handlebars/HTML template and drop it into `templates/`—the engine automatically discovers it and registers routes.
 2. **Built-in Financial Helpers**: Native support for Indian Numbering System (`₹25,00,000.00`), Lakhs/Crores Number-to-Words (`Twenty-Five Lakh Rupees Only`), financial ratios (DSCR, Debt/Equity), and comparative YoY trends.
 3. **Internalized Bureau Engine & Underwriting Scorecard**: Direct adapters for **TransUnion CIBIL** and **Experian** with legacy 36-month DPD string parsing, leverage aggregation, derogatory flag knockouts, and automatic CAM report hydration.
-4. **Print-Perfect Rendering**: Native `@page` support, custom headers/footers, dynamic page numbering (`Page X of Y`), and watermarks.
-5. **Pluggable eSign Gateway**: Unified interface supporting **Aadhaar eSign (Digio, Leegality)**, **DocuSign**, and a **Built-in Mock Provider** for zero-cost local testing.
-6. **Smart Anchor Detection**: Scans for visual/text anchors (`[[sig:signer_role:width:height]]`) without requiring manual coordinate calculations.
+4. **In-House Bank Statement Analysis (BSA)**: Complete replacement for Glib.ai/Perfios with Indian banking narration regex classification, Average Monthly Balance (AMB) computation, inward/outward bounce detection, un-reported loan discovery, and automatic CAM Section 6 auto-hydration.
+5. **Print-Perfect Rendering**: Native `@page` support, custom headers/footers, dynamic page numbering (`Page X of Y`), and watermarks.
+6. **Pluggable eSign Gateway**: Unified interface supporting **Aadhaar eSign (Digio, Leegality)**, **DocuSign**, and a **Built-in Mock Provider** for zero-cost local testing.
+7. **Smart Anchor Detection**: Scans for visual/text anchors (`[[sig:signer_role:width:height]]`) without requiring manual coordinate calculations.
 
 ---
 
@@ -199,6 +200,28 @@ Content-Type: application/json
 {
   "name": "Apex Precision Engineering Pvt Ltd",
   "pan": "AABCA8741E"
+}
+```
+
+### 7. Bank Statement Analysis (BSA - Glib.ai Replacement)
+```http
+POST /api/v1/bsa/analyze
+Content-Type: application/json
+
+{
+  "bankName": "HDFC Bank Ltd",
+  "accountNumberMasked": "XXXXXX9012"
+}
+```
+
+### 8. Auto-Hydrate CAM Banking Section (Section 6)
+```http
+POST /api/v1/bsa/cam-bridge
+Content-Type: application/json
+
+{
+  "bankName": "HDFC Bank Ltd",
+  "accountNumberMasked": "XXXXXX9012"
 }
 ```
 

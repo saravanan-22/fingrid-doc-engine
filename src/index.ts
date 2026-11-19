@@ -5,6 +5,7 @@ import { documentRouter } from './routes/document.routes.js';
 import { esignRouter } from './routes/esign.routes.js';
 import { templateRouter } from './routes/template.routes.js';
 import { bureauRouter } from './routes/bureau.routes.js';
+import { bsaRouter } from './routes/bsa.routes.js';
 import { TemplateLoader } from './engine/template-loader.js';
 
 const app = express();
@@ -32,6 +33,7 @@ app.use(`${config.apiPrefix}/documents`, documentRouter);
 app.use(`${config.apiPrefix}/esign`, esignRouter);
 app.use(`${config.apiPrefix}/templates`, templateRouter);
 app.use(`${config.apiPrefix}/bureau`, bureauRouter);
+app.use(`${config.apiPrefix}/bsa`, bsaRouter);
 
 // Start Server
 if (process.env.NODE_ENV !== 'test') {
