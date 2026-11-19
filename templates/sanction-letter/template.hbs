@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sanction Letter - {{sanctionRefNumber}}</title>
+  {{> styles }}
+</head>
+<body>
+  {{> watermark }}
+
+  <div class="page">
+    {{> header }}
+
+    <div class="doc-title-banner">
+      <div>
+        <div class="doc-title">KEY FACT STATEMENT & SANCTION LETTER</div>
+        <div class="doc-subtitle">Ref No: {{sanctionRefNumber}} • Sanction Date: {{formatDate sanctionDate}} • Valid Until: {{formatDate validUntil}}</div>
+      </div>
+      <div class="status-pill success">OFFICIALLY SANCTIONED</div>
+    </div>
+
+    <!-- Borrower Intro -->
+    <p style="margin-bottom: 12px; font-size: 9pt;">
+      To,<br>
+      <strong>{{borrower.name}}</strong> (PAN: <span class="num-font">{{borrower.pan}}</span>)<br>
+      {{borrower.address}}<br>
+      Email: {{borrower.email}} | Contact: {{borrower.mobile}}
+    </p>
+
+    <div class="callout-box info" style="font-size: 8.5pt;">
+      Dear Sir/Madam,<br>
+      With reference to your credit application, we are pleased to inform you that <strong>FinGrid Capital Services Pvt Ltd</strong> has in-principle sanctioned the following credit facility subject to the terms and statutory covenants enumerated below:
+    </div>
+
+    <!-- Loan Key Fact Terms Table -->
+    <div class="section-block">
+      <div class="section-title">Key Facility Parameters</div>
+      <table class="fin-table">
+        <tbody>
+          <tr>
+            <td style="width: 40%;"><strong>Facility Name</strong></td>
+            <td style="width: 60%; font-weight: 600;">{{loanTerms.facilityName}}</td>
+          </tr>
+          <tr>
+            <td><strong>Sanctioned Loan Amount</strong></td>
+            <td class="num-font font-bold text-green-600" style="font-size: 10.5pt;">
+              {{formatINR loanTerms.sanctionedAmount}} ({{numberToWords loanTerms.sanctionedAmount}})
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Interest Rate (% p.a.)</strong></td>
+            <td class="num-font font-bold">{{loanTerms.interestRatePercent}}% p.a. ({{loanTerms.interestType}} Rate)</td>
+          </tr>
+          <tr>
+            <td><strong>Tenure</strong></td>
+            <td>{{loanTerms.tenureMonths}} Months (Equated Monthly Installments)</td>
+          </tr>
+          <tr>
+            <td><strong>Monthly EMI Amount</strong></td>
+            <td class="num-font font-bold">{{formatINR loanTerms.monthlyEmi}}</td>
+          </tr>
+          <tr>
+            <td><strong>Upfront Processing Fee</strong></td>
+            <td class="num-font">{{formatINR loanTerms.processingFee}} + Applicable GST</td>
+          </tr>
+          <tr>
+            <td><strong>Documentation Charges</strong></td>
+            <td class="num-font">{{formatINR loanTerms.documentationCharges}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pre-Disbursement Conditions -->
+    {{#if disbursementConditions.length}}
+    <div class="section-block">
+      <div class="section-title">Pre-Disbursement Conditions</div>
+      <ul style="padding-left: 18px; font-size: 8.5pt; color: #334155; line-height: 1.5;">
+        {{#each disbursementConditions}}
+        <li style="margin-bottom: 4px;">{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+
+    <!-- Dual Signature Section: Lender & Borrower Acceptance -->
+    <div class="section-block no-break mt-6">
+      <div class="section-title">Dual Party eSign & Acceptance</div>
+      <p style="font-size: 8pt; color: #64748b; margin-bottom: 8px;">
+        By affixing digital signature below, the Borrower confirms acceptance of all terms, schedule, and covenants of this Sanction Letter.
+      </p>
+
+      <div class="signature-grid">
+        {{#each signers}}
+        <div class="esign-anchor-box" data-signer-id="{{this.id}}">
+          <div class="esign-badge">{{this.signatureType}}</div>
+          <span style="color: transparent; font-size: 1px;">[[sig:{{this.id}}:160:50]]</span>
+          <div class="official-seal-placeholder">{{#if (eq this.id "borrower_acceptor")}}Acceptor Stamp{{else}}FinGrid Seal{{/if}}</div>
+          <div class="esign-placeholder-line"></div>
+          <div class="esign-label">{{this.role}}</div>
+          <div class="doc-subtitle">{{this.name}}</div>
+          <div class="doc-subtitle text-xs text-gray-500">Signatory ID: {{this.id}}</div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    {{> footer }}
+  </div>
+</body>
+</html>

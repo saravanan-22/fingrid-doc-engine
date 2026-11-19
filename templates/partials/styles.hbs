@@ -1,0 +1,395 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  @page {
+    size: A4;
+    margin: 16mm 14mm 18mm 14mm;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      color: #6b7280;
+    }
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.45;
+    color: #1f2937;
+    background-color: #ffffff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    position: relative;
+    width: 100%;
+    page-break-after: always;
+  }
+
+  .page:last-child {
+    page-break-after: avoid;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  .no-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Corporate Header */
+  .fingrid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #1e3a8a;
+    margin-bottom: 16px;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-badge {
+    background: #1e3a8a;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 14pt;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #1e3a8a;
+    letter-spacing: -0.3px;
+  }
+
+  .logo-subtext {
+    font-size: 7.5pt;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .header-meta {
+    text-align: right;
+    font-size: 8pt;
+    color: #4b5563;
+    line-height: 1.35;
+  }
+
+  .header-meta strong {
+    color: #111827;
+  }
+
+  /* Document Titles */
+  .doc-title-banner {
+    background: #f8fafc;
+    border-left: 4px solid #1e3a8a;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .doc-title {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+  }
+
+  .doc-subtitle {
+    font-size: 8.5pt;
+    color: #64748b;
+    margin-top: 2px;
+  }
+
+  .status-pill {
+    font-size: 7.5pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+  }
+
+  .status-pill.success {
+    background: #dcfce7;
+    color: #15803d;
+    border-color: #bbf7d0;
+  }
+
+  .status-pill.warning {
+    background: #fef3c7;
+    color: #b45309;
+    border-color: #fde68a;
+  }
+
+  /* Section Styling */
+  .section-block {
+    margin-bottom: 18px;
+  }
+
+  .section-title {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #1e3a8a;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Grid Layouts */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* Key-Value Tables & Cards */
+  .kv-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 8px 10px;
+  }
+
+  .kv-label {
+    font-size: 7.5pt;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+  }
+
+  .kv-value {
+    font-size: 9pt;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .kv-value.highlight {
+    color: #1e3a8a;
+    font-size: 10pt;
+  }
+
+  /* Financial Data Tables */
+  table.fin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5pt;
+    margin-bottom: 12px;
+  }
+
+  table.fin-table th {
+    background-color: #1e3a8a;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 8px;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+  }
+
+  table.fin-table th.text-right,
+  table.fin-table td.text-right {
+    text-align: right;
+  }
+
+  table.fin-table th.text-center,
+  table.fin-table td.text-center {
+    text-align: center;
+  }
+
+  table.fin-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+  }
+
+  table.fin-table tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+
+  table.fin-table tr.total-row td {
+    background-color: #e2e8f0;
+    font-weight: 700;
+    color: #0f172a;
+    border-top: 1.5px solid #64748b;
+    border-bottom: 2px solid #0f172a;
+  }
+
+  table.fin-table tr.subtotal-row td {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: #1e293b;
+    border-top: 1px dashed #cbd5e1;
+  }
+
+  /* Monospace for numbers */
+  .num-font {
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Color indicators */
+  .text-green-600 { color: #16a34a; font-weight: 600; }
+  .text-red-600 { color: #dc2626; font-weight: 600; }
+  .text-gray-500 { color: #6b7280; }
+
+  /* Callout boxes */
+  .callout-box {
+    background: #f0fdf4;
+    border-left: 3px solid #22c55e;
+    padding: 10px 12px;
+    margin: 12px 0;
+    font-size: 8.5pt;
+    color: #14532d;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .callout-box.info {
+    background: #eff6ff;
+    border-left-color: #3b82f6;
+    color: #1e40af;
+  }
+
+  .callout-box.warning {
+    background: #fffbeb;
+    border-left-color: #f59e0b;
+    color: #92400e;
+  }
+
+  /* eSign Anchor Boxes */
+  .signature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+    break-inside: avoid;
+  }
+
+  .esign-anchor-box {
+    border: 1px dashed #94a3b8;
+    background: #f8fafc;
+    border-radius: 4px;
+    padding: 12px 14px;
+    position: relative;
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .esign-placeholder-line {
+    border-bottom: 1px solid #334155;
+    margin-bottom: 6px;
+    width: 100%;
+  }
+
+  .esign-label {
+    font-size: 8pt;
+    font-weight: 600;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .esign-badge {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 6.5pt;
+    font-weight: 600;
+    color: #0284c7;
+    background: #e0f2fe;
+    padding: 2px 5px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  .official-seal-placeholder {
+    width: 60px;
+    height: 60px;
+    border: 2px dashed #94a3b8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6.5pt;
+    color: #94a3b8;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* Watermark */
+  .watermark-overlay {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: 72pt;
+    font-weight: 900;
+    color: rgba(148, 163, 184, 0.12);
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    pointer-events: none;
+    z-index: 0;
+    white-space: nowrap;
+  }
+
+  /* Footer */
+  .fingrid-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-top: 8px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 7pt;
+    color: #64748b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>

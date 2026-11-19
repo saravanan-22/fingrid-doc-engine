@@ -1,0 +1,51 @@
+{
+  "sanctionRefNumber": "SANCT-2026-FNG-88910",
+  "sanctionDate": "2026-11-19",
+  "validUntil": "2026-12-19",
+  "borrower": {
+    "name": "Kaveri Agro Bio-Products LLP",
+    "pan": "AAHFK9012D",
+    "contactPerson": "Raghavan N. Pillai (Designated Partner)",
+    "address": "SF-12, Agro Business Park, Hosur Road, Bengaluru, Karnataka 560100",
+    "email": "raghavan@kaveriagro.example.com",
+    "mobile": "+91 94480 23145"
+  },
+  "loanTerms": {
+    "facilityName": "Green Agri-Infra Machinery Term Loan",
+    "sanctionedAmount": 8500000,
+    "interestRatePercent": 10.5,
+    "interestType": "FIXED",
+    "tenureMonths": 36,
+    "monthlyEmi": 276295,
+    "processingFee": 85000,
+    "documentationCharges": 15000,
+    "penalChargesPerMonth": 2.0
+  },
+  "disbursementConditions": [
+    "Execution of Hypothecation Agreement and Demand Promissory Note.",
+    "Submission of pro-forma invoices of solar cold storage equipment.",
+    "Personal Guarantee from both Designated Partners."
+  ],
+  "specialCovenants": [
+    "Borrower shall maintain insurance coverage on all hypothecated assets.",
+    "Quarterly inspection of installation site by FinGrid authorized surveyor."
+  ],
+  "signers": [
+    {
+      "id": "fingrid_sanction_officer",
+      "name": "Arunachalam Murugan",
+      "role": "AUTHORIZED SANCTIONING OFFICER",
+      "email": "a.murugan@fingrid.example.com",
+      "signatureType": "DSC",
+      "sequence": 1
+    },
+    {
+      "id": "borrower_acceptor",
+      "name": "Raghavan N. Pillai",
+      "role": "BORROWER ACCEPTANCE (DESIGNATED PARTNER)",
+      "email": "raghavan@kaveriagro.example.com",
+      "signatureType": "AADHAAR_ESIGN",
+      "sequence": 2
+    }
+  ]
+}

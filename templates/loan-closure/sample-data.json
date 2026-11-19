@@ -1,0 +1,48 @@
+{
+  "nocReferenceNumber": "NOC-2026-FNG-LN44910",
+  "issueDate": "2026-11-19",
+  "borrower": {
+    "name": "Pratap Automotives India Private Limited",
+    "customerNumber": "CUST-982310",
+    "address": "Survey No. 48/2, Pune-Solapur Highway, Hadapsar, Pune, Maharashtra 412307",
+    "email": "finance@pratapauto.example.com",
+    "mobile": "+91 98220 11992"
+  },
+  "loanDetails": {
+    "accountNumber": "LN-SME-2022-09412",
+    "facilityType": "Secured Business Expansion Term Loan",
+    "sanctionDate": "2022-04-12",
+    "sanctionAmount": 15000000,
+    "closureDate": "2026-11-15",
+    "closureReason": "FULL_PREPAYMENT",
+    "totalPrincipalRepaid": 15000000,
+    "outstandingDues": 0
+  },
+  "securitiesReleased": [
+    {
+      "assetType": "Commercial Real Estate (Mortgage)",
+      "identifier": "Registered Indenture Deed No. 4410/2022 (SRO Pune)",
+      "description": "Industrial Shed No. 3, Hadapsar Industrial Area, Pune (Plot Area 9,500 sq ft)"
+    },
+    {
+      "assetType": "Hypothecation of Plant Machinery",
+      "identifier": "Asset Tag: FNG-EQ-2022-91 to 98",
+      "description": "Robotic Welding Station (KUKA) and Hydraulic Stamping Press (500 Ton)"
+    }
+  ],
+  "rocSatisfactionNote": "FinGrid Capital confirms that all charges created with the Registrar of Companies (ROC, Pune) under Charge ID: 100582910 regarding this facility have been fully satisfied. Necessary e-Form CHG-4 is being filed with MCA.",
+  "branch": {
+    "branchName": "Pune Mid-Corporate Operations Hub",
+    "city": "Pune",
+    "branchEmail": "operations.pune@fingrid.example.com"
+  },
+  "signers": [
+    {
+      "id": "branch_operations_head",
+      "name": "Rajeshwari S. Kulkarni",
+      "role": "AUTHORIZED SIGNATORY / HUB MANAGER",
+      "email": "rajeshwari.kulkarni@fingrid.example.com",
+      "signatureType": "DSC"
+    }
+  ]
+}

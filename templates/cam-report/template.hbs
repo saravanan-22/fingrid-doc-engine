@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Credit Appraisal Memo - {{borrower.entityName}}</title>
+  {{> styles }}
+</head>
+<body>
+  {{> watermark }}
+
+  <!-- PAGE 1: Executive Summary & Borrower Details -->
+  <div class="page">
+    {{> header }}
+
+    <div class="doc-title-banner">
+      <div>
+        <div class="doc-title">Credit Appraisal Memo (CAM)</div>
+        <div class="doc-subtitle">Proposal Ref: {{applicationId}} • Branch: {{branchName}}</div>
+      </div>
+      <div class="status-pill warning">CONFIDENTIAL - CREDIT COMMITTEE</div>
+    </div>
+
+    <!-- 1. Executive Summary Grid -->
+    <div class="section-block">
+      <div class="section-title">1. Facility Request Overview</div>
+      <div class="grid-4">
+        <div class="kv-card">
+          <div class="kv-label">Proposed Amount</div>
+          <div class="kv-value highlight">{{formatINR facilityRequested.proposedAmount}}</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Recommended Amount</div>
+          <div class="kv-value highlight">{{formatINR facilityRequested.recommendedAmount}}</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Facility Type</div>
+          <div class="kv-value">{{facilityRequested.facilityType}}</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Interest Rate & Tenure</div>
+          <div class="kv-value">{{facilityRequested.interestRatePercent}}% p.a. | {{facilityRequested.tenureMonths}} Mos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Borrower Profile -->
+    <div class="section-block">
+      <div class="section-title">2. Borrower Profile</div>
+      <div class="grid-2">
+        <div class="kv-card">
+          <div class="kv-label">Entity Name & Constitution</div>
+          <div class="kv-value">{{borrower.entityName}} ({{borrower.entityType}})</div>
+          <div class="doc-subtitle mt-2"><strong>PAN:</strong> {{borrower.pan}} | <strong>GSTIN:</strong> {{borrower.gstin}}</div>
+          <div class="doc-subtitle"><strong>Address:</strong> {{borrower.registeredAddress}}</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Business Line & Activity</div>
+          <div class="kv-value">{{borrower.businessActivity}}</div>
+          <div class="doc-subtitle mt-2"><strong>Credit Analyst:</strong> {{creditAnalystName}}</div>
+          <div class="doc-subtitle"><strong>Relationship Manager:</strong> {{relationshipManagerName}}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Promoters & Key Management -->
+    <div class="section-block">
+      <div class="section-title">3. Promoter Net Worth & CIBIL Profile</div>
+      <table class="fin-table">
+        <thead>
+          <tr>
+            <th>Promoter / Director Name</th>
+            <th>Designation</th>
+            <th class="text-center">Holding %</th>
+            <th class="text-right">Net Worth</th>
+            <th class="text-center">CIBIL Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each borrower.promoters}}
+          <tr>
+            <td><strong>{{this.name}}</strong></td>
+            <td>{{this.designation}}</td>
+            <td class="text-center">{{this.shareholdingPercentage}}%</td>
+            <td class="text-right num-font">{{formatINR this.netWorth}}</td>
+            <td class="text-center">
+              <span class="status-pill {{#if (gte this.cibilScore 750)}}success{{else}}warning{{/if}}">
+                {{this.cibilScore}}
+              </span>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 4. Bureau Summary -->
+    <div class="section-block">
+      <div class="section-title">4. Commercial Bureau & Risk Scoring</div>
+      <div class="grid-3">
+        <div class="kv-card">
+          <div class="kv-label">Commercial CIBIL Rank</div>
+          <div class="kv-value text-green-600">{{bureauAnalysis.cmrRank}}</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Commercial Score</div>
+          <div class="kv-value">{{bureauAnalysis.cibilCommercialScore}}</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Delinquency Summary</div>
+          <div class="kv-value">{{bureauAnalysis.delinquencySummary}}</div>
+        </div>
+      </div>
+    </div>
+
+    {{> footer }}
+  </div>
+
+  <!-- PAGE 2: Financial Performance Ratios & Collaterals -->
+  <div class="page page-break">
+    {{> header }}
+
+    <div class="section-block">
+      <div class="section-title">5. Three-Year Financial Summary & Ratios</div>
+      <table class="fin-table">
+        <thead>
+          <tr>
+            <th>Financial Metric (Amounts in INR)</th>
+            {{#each financialSummary}}
+            <th class="text-right">{{this.financialYear}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Revenue from Operations</strong></td>
+            {{#each financialSummary}}
+            <td class="text-right num-font">{{formatINR this.revenueFromOperations}}</td>
+            {{/each}}
+          </tr>
+          <tr>
+            <td>EBITDA</td>
+            {{#each financialSummary}}
+            <td class="text-right num-font">{{formatINR this.ebitda}} ({{this.ebitdaMarginPercent}}%)</td>
+            {{/each}}
+          </tr>
+          <tr>
+            <td>Profit After Tax (PAT)</td>
+            {{#each financialSummary}}
+            <td class="text-right num-font">{{formatINR this.pat}} ({{this.patMarginPercent}}%)</td>
+            {{/each}}
+          </tr>
+          <tr class="subtotal-row">
+            <td>Tangible Net Worth</td>
+            {{#each financialSummary}}
+            <td class="text-right num-font">{{formatINR this.netWorth}}</td>
+            {{/each}}
+          </tr>
+          <tr>
+            <td>Total Debt Outstanding</td>
+            {{#each financialSummary}}
+            <td class="text-right num-font">{{formatINR this.totalDebt}}</td>
+            {{/each}}
+          </tr>
+          <tr>
+            <td>Debt Service Coverage Ratio (DSCR)</td>
+            {{#each financialSummary}}
+            <td class="text-right num-font font-bold {{#if (gte this.dscr 1.5)}}text-green-600{{else}}text-red-600{{/if}}">
+              {{this.dscr}}x
+            </td>
+            {{/each}}
+          </tr>
+          <tr>
+            <td>Current Ratio</td>
+            {{#each financialSummary}}
+            <td class="text-right num-font">{{this.currentRatio}}</td>
+            {{/each}}
+          </tr>
+          <tr>
+            <td>Debt / Equity Ratio</td>
+            {{#each financialSummary}}
+            <td class="text-right num-font">{{this.debtEquityRatio}}</td>
+            {{/each}}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 6. Banking Behavior Analysis -->
+    <div class="section-block">
+      <div class="section-title">6. Primary Banking Analysis</div>
+      <div class="grid-3">
+        <div class="kv-card">
+          <div class="kv-label">Primary Operating Bank</div>
+          <div class="kv-value">{{bankingSummary.bankName}} ({{bankingSummary.accountNumberMasked}})</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Annual Banking Credit Turnover</div>
+          <div class="kv-value num-font">{{formatINR bankingSummary.annualTurnoverCredited}}</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Inward / Outward Bounces</div>
+          <div class="kv-value {{#if (eq bankingSummary.inwardChequeBounces 0)}}text-green-600{{else}}text-red-600{{/if}}">
+            {{bankingSummary.inwardChequeBounces}} Inward / {{bankingSummary.outwardChequeBounces}} Outward
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Collateral & Security Details -->
+    {{#if collaterals.length}}
+    <div class="section-block">
+      <div class="section-title">7. Collateral & Hypothecation Security</div>
+      <table class="fin-table">
+        <thead>
+          <tr>
+            <th>Asset Type</th>
+            <th>Description & Location</th>
+            <th>Charge Type</th>
+            <th class="text-right">Market Value</th>
+            <th class="text-right">Distress Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each collaterals}}
+          <tr>
+            <td><strong>{{this.assetType}}</strong></td>
+            <td>{{this.description}}</td>
+            <td>{{this.chargeType}}</td>
+            <td class="text-right num-font">{{formatINR this.marketValue}}</td>
+            <td class="text-right num-font">{{formatINR this.distressValue}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/if}}
+
+    <!-- 8. Recommendation & Signatures -->
+    <div class="section-block no-break">
+      <div class="section-title">8. Sanction Recommendation & Multi-Party Approval</div>
+      <div class="callout-box">
+        <strong>Recommendation Decision: {{creditRecommendation.decision}}</strong>
+        <p class="mt-1">{{creditRecommendation.rationale}}</p>
+      </div>
+
+      <!-- Signature Anchor Matrix -->
+      <div class="signature-grid">
+        {{#each signers}}
+        <div class="esign-anchor-box" data-signer-id="{{this.id}}">
+          <div class="esign-badge">{{this.signatureType}}</div>
+          <!-- Anchor Token scanned by eSign Providers -->
+          <span style="color: transparent; font-size: 1px;">[[sig:{{this.id}}:160:50]]</span>
+          <div class="official-seal-placeholder">Digital Seal</div>
+          <div class="esign-placeholder-line"></div>
+          <div class="esign-label">{{this.role}}</div>
+          <div class="doc-subtitle">{{this.name}}</div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    {{> footer }}
+  </div>
+</body>
+</html>

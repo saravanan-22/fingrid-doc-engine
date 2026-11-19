@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  doc-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fingrid-doc-engine
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - NODE_ENV=production
+      - GOTENBERG_URL=http://gotenberg:3000
+      - ESIGN_PROVIDER=MOCK
+    depends_on:
+      - gotenberg
+    restart: unless-stopped
+
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    container_name: fingrid-gotenberg
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

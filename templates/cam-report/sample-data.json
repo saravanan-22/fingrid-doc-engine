@@ -1,0 +1,164 @@
+{
+  "applicationId": "CAM-2026-FNG-9821",
+  "proposalDate": "2026-11-19",
+  "branchName": "Mumbai Corporate Centre (BKC)",
+  "creditAnalystName": "Anand R. Verma (Sr. Manager - Risk)",
+  "relationshipManagerName": "Pooja Hegde (AVP - Corporate Lending)",
+  "borrower": {
+    "entityName": "Apex Precision Engineering Pvt Ltd",
+    "entityType": "PRIVATE_LIMITED",
+    "pan": "AABCA8741E",
+    "gstin": "27AABCA8741E1Z3",
+    "cin": "U28111MH2016PTC288129",
+    "registeredAddress": "Plot C-14, TTC Industrial Area, MIDC Pawane, Navi Mumbai 400705",
+    "businessActivity": "Manufacture of high-precision CNC aerospace and automotive forged components",
+    "promoters": [
+      {
+        "name": "Suresh Chandra Gupta",
+        "designation": "Managing Director",
+        "shareholdingPercentage": 55,
+        "netWorth": 145000000,
+        "cibilScore": 792
+      },
+      {
+        "name": "Nitin S. Gupta",
+        "designation": "Director (Operations)",
+        "shareholdingPercentage": 45,
+        "netWorth": 82000000,
+        "cibilScore": 768
+      }
+    ]
+  },
+  "facilityRequested": {
+    "facilityType": "TERM_LOAN",
+    "proposedAmount": 35000000,
+    "recommendedAmount": 30000000,
+    "tenureMonths": 48,
+    "interestRatePercent": 11.25,
+    "processingFeePercent": 1.0,
+    "repaymentFrequency": "MONTHLY",
+    "purpose": "Procurement of 5-Axis CNC Milling Machinery from DMG Mori Germany for aerospace order expansion"
+  },
+  "financialSummary": [
+    {
+      "financialYear": "FY 2023-24 (Audited)",
+      "revenueFromOperations": 182000000,
+      "ebitda": 28400000,
+      "ebitdaMarginPercent": 15.6,
+      "pat": 14200000,
+      "patMarginPercent": 7.8,
+      "netWorth": 72000000,
+      "totalDebt": 41000000,
+      "dscr": 2.1,
+      "currentRatio": 1.48,
+      "debtEquityRatio": 0.57
+    },
+    {
+      "financialYear": "FY 2024-25 (Audited)",
+      "revenueFromOperations": 224000000,
+      "ebitda": 36800000,
+      "ebitdaMarginPercent": 16.4,
+      "pat": 19600000,
+      "patMarginPercent": 8.75,
+      "netWorth": 91600000,
+      "totalDebt": 48000000,
+      "dscr": 1.95,
+      "currentRatio": 1.55,
+      "debtEquityRatio": 0.52
+    },
+    {
+      "financialYear": "FY 2025-26 (Projected)",
+      "revenueFromOperations": 285000000,
+      "ebitda": 48200000,
+      "ebitdaMarginPercent": 16.9,
+      "pat": 26800000,
+      "patMarginPercent": 9.4,
+      "netWorth": 118400000,
+      "totalDebt": 62000000,
+      "dscr": 1.82,
+      "currentRatio": 1.62,
+      "debtEquityRatio": 0.52
+    }
+  ],
+  "bankingSummary": {
+    "bankName": "HDFC Bank Ltd",
+    "accountNumberMasked": "XXXXXX9012",
+    "annualTurnoverCredited": 235000000,
+    "averageMonthlyBalance": 8400000,
+    "inwardChequeBounces": 0,
+    "outwardChequeBounces": 0,
+    "cleanBankingFlag": true
+  },
+  "bureauAnalysis": {
+    "cmrRank": "CMR-2 (Very Low Risk)",
+    "cibilCommercialScore": 810,
+    "delinquencySummary": "Zero 30+ DPD reported across all scheduled commercial banks for the last 36 months."
+  },
+  "collaterals": [
+    {
+      "assetType": "Industrial Land & Building",
+      "description": "Plot C-14, TTC Industrial Area, Pawane, Navi Mumbai (Area: 1,850 sq. meters)",
+      "chargeType": "EXCLUSIVE_FIRST_CHARGE",
+      "marketValue": 55000000,
+      "distressValue": 42000000
+    },
+    {
+      "assetType": "Hypothecation of Plant & Machinery",
+      "description": "Exclusive first charge on newly procured 5-Axis CNC Milling Machines",
+      "chargeType": "HYPOTHECATION",
+      "marketValue": 38000000,
+      "distressValue": 28500000
+    }
+  ],
+  "riskAssessment": {
+    "industryRisk": "LOW",
+    "businessRisk": "MODERATE",
+    "financialRisk": "LOW",
+    "mitigants": [
+      "Secured long-term purchase agreements with tier-1 aerospace defense contractors.",
+      "Conservative leverage with debt/equity well below 1.0x.",
+      "Promoters possess over 22 years of technical manufacturing pedigree."
+    ],
+    "keyStrengths": [
+      "Consistent 20%+ YoY revenue growth over past 3 financial years",
+      "Strong DSCR of 1.95x providing robust buffer for repayment debt service"
+    ],
+    "keyRisks": [
+      "Customer concentration: Top 3 clients constitute 62% of annual revenue"
+    ]
+  },
+  "creditRecommendation": {
+    "decision": "SANCTION",
+    "rationale": "Strong balance sheet, robust debt service coverage, collateral cover of 1.83x against recommended facility of ₹3.00 Crores.",
+    "covenants": [
+      "Monthly submission of book debt and stock audit statements.",
+      "Promoters personal guarantees to remain unconditional and irrevocable throughout loan tenure."
+    ]
+  },
+  "signers": [
+    {
+      "id": "credit_analyst",
+      "name": "Anand R. Verma",
+      "role": "CREDIT ANALYST",
+      "email": "anand.verma@fingrid.example.com",
+      "signatureType": "DSC",
+      "sequence": 1
+    },
+    {
+      "id": "risk_head",
+      "name": "Meera Swaminathan",
+      "role": "CHIEF RISK OFFICER",
+      "email": "meera.risk@fingrid.example.com",
+      "signatureType": "AADHAAR_ESIGN",
+      "sequence": 2
+    },
+    {
+      "id": "sanction_chair",
+      "name": "Vikramaditya Rao",
+      "role": "SANCTION COMMITTEE CHAIR",
+      "email": "v.rao@fingrid.example.com",
+      "signatureType": "AADHAAR_ESIGN",
+      "sequence": 3
+    }
+  ]
+}

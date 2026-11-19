@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loan Account Closure Certificate & NOC - {{loanDetails.accountNumber}}</title>
+  {{> styles }}
+</head>
+<body>
+  {{> watermark }}
+
+  <div class="page">
+    {{> header }}
+
+    <div class="doc-title-banner">
+      <div>
+        <div class="doc-title">NO OBJECTION CERTIFICATE & LOAN CLOSURE</div>
+        <div class="doc-subtitle">NOC Ref No: {{nocReferenceNumber}} • Issue Date: {{formatDate issueDate}}</div>
+      </div>
+      <div class="status-pill success">LOAN ACCOUNT FULLY CLOSED</div>
+    </div>
+
+    <!-- Borrower & Address Details -->
+    <div class="kv-card mb-4" style="background: #ffffff; border: 1px solid #cbd5e1;">
+      <div class="grid-2">
+        <div>
+          <div class="kv-label">To, (Borrower Name & Address)</div>
+          <div class="kv-value highlight">{{borrower.name}}</div>
+          <div class="doc-subtitle mt-1">Customer ID: {{borrower.customerNumber}}</div>
+          <div class="doc-subtitle">{{borrower.address}}</div>
+        </div>
+        <div>
+          <div class="kv-label">Servicing Branch</div>
+          <div class="kv-value">{{branch.branchName}}, {{branch.city}}</div>
+          <div class="doc-subtitle mt-1">Contact: {{branch.branchEmail}}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legal Certificate Declaration -->
+    <div class="callout-box info" style="font-size: 9.5pt; line-height: 1.6;">
+      <p>
+        This is to certify that the credit facility availed by <strong>{{borrower.name}}</strong> 
+        from <strong>FinGrid Capital Services Pvt Ltd</strong> has been fully repaid, settled, 
+        and closed with <strong>NIL / ZERO outstanding balance</strong> in our books of accounts.
+      </p>
+    </div>
+
+    <!-- Loan Summary Grid -->
+    <div class="section-block">
+      <div class="section-title">Facility Settlement Particulars</div>
+      <table class="fin-table">
+        <tbody>
+          <tr>
+            <td style="width: 35%;"><strong>Loan Account Number</strong></td>
+            <td class="num-font font-bold" style="width: 65%;">{{loanDetails.accountNumber}}</td>
+          </tr>
+          <tr>
+            <td><strong>Facility Type</strong></td>
+            <td>{{loanDetails.facilityType}}</td>
+          </tr>
+          <tr>
+            <td><strong>Original Sanction Date & Amount</strong></td>
+            <td>{{formatDate loanDetails.sanctionDate}} — <span class="num-font">{{formatINR loanDetails.sanctionAmount}}</span> ({{numberToWords loanDetails.sanctionAmount}})</td>
+          </tr>
+          <tr>
+            <td><strong>Final Closure Date</strong></td>
+            <td>{{formatDate loanDetails.closureDate}}</td>
+          </tr>
+          <tr>
+            <td><strong>Closure Classification</strong></td>
+            <td>{{loanDetails.closureReason}}</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Current Outstanding Dues</strong></td>
+            <td class="text-green-600 font-bold num-font">₹0.00 (NIL DUES)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Released Securities / Collaterals -->
+    {{#if securitiesReleased.length}}
+    <div class="section-block">
+      <div class="section-title">Release of Security & Hypothecated Collaterals</div>
+      <p style="font-size: 8.5pt; color: #475569; margin-bottom: 8px;">
+        FinGrid Capital hereby unconditionally releases and relinquishes all claims, lien, mortgage, 
+        and hypothecation over the undermentioned assets:
+      </p>
+      <table class="fin-table">
+        <thead>
+          <tr>
+            <th style="width: 30%;">Asset Category</th>
+            <th style="width: 35%;">Identifier / Document No.</th>
+            <th style="width: 35%;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each securitiesReleased}}
+          <tr>
+            <td><strong>{{this.assetType}}</strong></td>
+            <td class="num-font">{{this.identifier}}</td>
+            <td>{{this.description}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/if}}
+
+    <!-- Statutory ROC Note -->
+    <div class="callout-box warning">
+      <strong>Corporate Borrower Charge Satisfaction (ROC Notice):</strong>
+      <p class="mt-1">{{rocSatisfactionNote}}</p>
+    </div>
+
+    <!-- Official Signature Block -->
+    <div class="section-block no-break mt-6">
+      <div class="section-title">For FinGrid Capital Services Pvt Ltd</div>
+      <div class="signature-grid">
+        {{#each signers}}
+        <div class="esign-anchor-box" data-signer-id="{{this.id}}">
+          <div class="esign-badge">{{this.signatureType}}</div>
+          <span style="color: transparent; font-size: 1px;">[[sig:{{this.id}}:160:50]]</span>
+          <div class="official-seal-placeholder">Branch Seal</div>
+          <div class="esign-placeholder-line"></div>
+          <div class="esign-label">{{this.role}}</div>
+          <div class="doc-subtitle">{{this.name}}</div>
+          <div class="doc-subtitle text-xs text-gray-500">Digitally Verified via {{this.signatureType}}</div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    {{> footer }}
+  </div>
+</body>
+</html>

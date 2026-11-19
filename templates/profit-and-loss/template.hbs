@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profit and Loss Statement - {{companyName}}</title>
+  {{> styles }}
+</head>
+<body>
+  {{> watermark }}
+
+  <div class="page">
+    {{> header }}
+
+    <div class="doc-title-banner">
+      <div>
+        <div class="doc-title">{{statementTitle}}</div>
+        <div class="doc-subtitle">{{companyName}} • {{accountingPeriod}}</div>
+      </div>
+      <div class="status-pill success">AUDITED FINANCIAL EXTRACT</div>
+    </div>
+
+    <div class="callout-box info mb-4">
+      <div class="flex justify-between items-center">
+        <span><strong>Reporting Entity:</strong> {{companyName}} {{#if cin}}(CIN: {{cin}}){{/if}}</span>
+        <span class="num-font font-bold">Amounts stated in {{unit}}</span>
+      </div>
+    </div>
+
+    <!-- P&L Financial Statement Table -->
+    <table class="fin-table">
+      <thead>
+        <tr>
+          <th style="width: 50%;">Particulars</th>
+          <th style="width: 10%;" class="text-center">Note</th>
+          <th style="width: 20%;" class="text-right">{{currentPeriodHeader}}</th>
+          <th style="width: 20%;" class="text-right">{{previousPeriodHeader}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Income Section -->
+        <tr style="background: #e2e8f0; font-weight: 700;">
+          <td colspan="4">{{incomeSection.title}}</td>
+        </tr>
+        {{#each incomeSection.items}}
+        <tr class="{{#if this.isTotal}}total-row{{else if this.isSubtotal}}subtotal-row{{/if}}">
+          <td>{{this.particulars}}</td>
+          <td class="text-center">{{this.noteRef}}</td>
+          <td class="text-right num-font">{{formatINR this.currentPeriod}}</td>
+          <td class="text-right num-font">{{formatINR this.previousPeriod}}</td>
+        </tr>
+        {{/each}}
+        <tr class="total-row">
+          <td><strong>Total Income (I)</strong></td>
+          <td></td>
+          <td class="text-right num-font">{{formatINR incomeSection.totalRevenueCurrent}}</td>
+          <td class="text-right num-font">{{formatINR incomeSection.totalRevenuePrevious}}</td>
+        </tr>
+
+        <!-- Expense Section -->
+        <tr style="background: #e2e8f0; font-weight: 700;">
+          <td colspan="4">{{expenseSection.title}}</td>
+        </tr>
+        {{#each expenseSection.items}}
+        <tr class="{{#if this.isTotal}}total-row{{else if this.isSubtotal}}subtotal-row{{/if}}">
+          <td>{{this.particulars}}</td>
+          <td class="text-center">{{this.noteRef}}</td>
+          <td class="text-right num-font">{{formatINR this.currentPeriod}}</td>
+          <td class="text-right num-font">{{formatINR this.previousPeriod}}</td>
+        </tr>
+        {{/each}}
+        <tr class="total-row">
+          <td><strong>Total Expenses (II)</strong></td>
+          <td></td>
+          <td class="text-right num-font">{{formatINR expenseSection.totalExpensesCurrent}}</td>
+          <td class="text-right num-font">{{formatINR expenseSection.totalExpensesPrevious}}</td>
+        </tr>
+
+        <!-- Tax & Net Profit -->
+        <tr style="background: #e2e8f0; font-weight: 700;">
+          <td colspan="4">III. Profit Before Exceptional Items and Tax</td>
+        </tr>
+        <tr class="subtotal-row">
+          <td><strong>Profit Before Tax (PBT) (I - II)</strong></td>
+          <td></td>
+          <td class="text-right num-font font-bold text-green-600">{{formatINR taxSection.profitBeforeTaxCurrent}}</td>
+          <td class="text-right num-font font-bold text-green-600">{{formatINR taxSection.profitBeforeTaxPrevious}}</td>
+        </tr>
+        <tr>
+          <td>Current Income Tax Expense</td>
+          <td></td>
+          <td class="text-right num-font">{{formatINR taxSection.taxExpensesCurrent}}</td>
+          <td class="text-right num-font">{{formatINR taxSection.taxExpensesPrevious}}</td>
+        </tr>
+        <tr class="total-row" style="border-bottom: 3px double #0f172a;">
+          <td><strong>Profit for the Period / PAT (IV)</strong></td>
+          <td></td>
+          <td class="text-right num-font font-bold text-green-600">{{formatINR taxSection.profitAfterTaxCurrent}}</td>
+          <td class="text-right num-font font-bold text-green-600">{{formatINR taxSection.profitAfterTaxPrevious}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Signatories Section -->
+    <div class="section-block no-break mt-8">
+      <div class="section-title">Signatures to the Financial Statements</div>
+      <div class="signature-grid">
+        {{#each signers}}
+        <div class="esign-anchor-box" data-signer-id="{{this.id}}">
+          <div class="esign-badge">{{this.signatureType}}</div>
+          <span style="color: transparent; font-size: 1px;">[[sig:{{this.id}}:150:50]]</span>
+          <div class="esign-placeholder-line"></div>
+          <div class="esign-label">{{this.role}}</div>
+          <div class="doc-subtitle">{{this.name}}</div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    {{> footer }}
+  </div>
+</body>
+</html>

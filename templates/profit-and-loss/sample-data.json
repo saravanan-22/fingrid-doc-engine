@@ -1,0 +1,102 @@
+{
+  "companyName": "Sterling Renewable Technologies Limited",
+  "cin": "L40106GJ2018PLC102934",
+  "statementTitle": "Statement of Profit and Loss (Audited)",
+  "accountingPeriod": "For the year ended 31 March 2025",
+  "unit": "₹ in Lakhs",
+  "currentPeriodHeader": "31-Mar-2025",
+  "previousPeriodHeader": "31-Mar-2024",
+  "incomeSection": {
+    "title": "I. Revenue",
+    "items": [
+      {
+        "particulars": "Revenue from operations (Sale of Solar Power Equipment)",
+        "noteRef": "21",
+        "currentPeriod": 425000000,
+        "previousPeriod": 348000000
+      },
+      {
+        "particulars": "Other operating income (Engineering Services & EPC)",
+        "noteRef": "22",
+        "currentPeriod": 18500000,
+        "previousPeriod": 14200000
+      },
+      {
+        "particulars": "Other non-operating income (Interest on deposits, Forex gain)",
+        "noteRef": "23",
+        "currentPeriod": 4500000,
+        "previousPeriod": 3100000
+      }
+    ],
+    "totalRevenueCurrent": 448000000,
+    "totalRevenuePrevious": 365300000
+  },
+  "expenseSection": {
+    "title": "II. Expenses",
+    "items": [
+      {
+        "particulars": "Cost of raw materials consumed & components",
+        "noteRef": "24",
+        "currentPeriod": 268000000,
+        "previousPeriod": 224000000
+      },
+      {
+        "particulars": "Employee benefits expense (Salaries, PF, Gratuity)",
+        "noteRef": "25",
+        "currentPeriod": 42000000,
+        "previousPeriod": 36500000
+      },
+      {
+        "particulars": "Finance costs (Interest on Term Loans & Working Capital)",
+        "noteRef": "26",
+        "currentPeriod": 19200000,
+        "previousPeriod": 17800000
+      },
+      {
+        "particulars": "Depreciation and amortization expense",
+        "noteRef": "11",
+        "currentPeriod": 16400000,
+        "previousPeriod": 14900000
+      },
+      {
+        "particulars": "Other administrative and plant operating expenses",
+        "noteRef": "27",
+        "currentPeriod": 28400000,
+        "previousPeriod": 23600000
+      }
+    ],
+    "totalExpensesCurrent": 374000000,
+    "totalExpensesPrevious": 316800000
+  },
+  "taxSection": {
+    "profitBeforeTaxCurrent": 74000000,
+    "profitBeforeTaxPrevious": 48500000,
+    "taxExpensesCurrent": 18600000,
+    "taxExpensesPrevious": 12200000,
+    "profitAfterTaxCurrent": 55400000,
+    "profitAfterTaxPrevious": 36300000
+  },
+  "signers": [
+    {
+      "id": "cfo",
+      "name": "Kavita R. Deshmukh",
+      "role": "CHIEF FINANCIAL OFFICER",
+      "email": "kavita.cfo@sterlingrenew.example.com",
+      "signatureType": "DSC"
+    },
+    {
+      "id": "managing_director",
+      "name": "Arvind K. Singhania",
+      "role": "MANAGING DIRECTOR",
+      "email": "arvind@sterlingrenew.example.com",
+      "signatureType": "AADHAAR_ESIGN"
+    },
+    {
+      "id": "statutory_auditor",
+      "name": "CA Ramesh B. Joshi (Partner, Joshi & Co. Chartered Accountants)",
+      "role": "STATUTORY AUDITOR (FCA 089231)",
+      "email": "ramesh@joshico.example.com",
+      "signatureType": "DSC"
+    }
+  ]
+}

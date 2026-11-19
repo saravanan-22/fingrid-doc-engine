@@ -1,0 +1,45 @@
+{
+  "name": "fingrid-doc-engine",
+  "version": "1.0.0",
+  "description": "Dynamic financial document generation engine with eSign integration for FinGrid",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "cli:generate": "tsx src/cli.ts generate",
+    "cli:esign": "tsx src/cli.ts esign",
+    "test": "node --test tests/**/*.test.js || tsx tests/engine.test.ts"
+  },
+  "keywords": [
+    "fintech",
+    "document-generation",
+    "pdf",
+    "cam-report",
+    "profit-and-loss",
+    "esign",
+    "aadhaar-esign",
+    "docusign",
+    "digio",
+    "leegality"
+  ],
+  "author": "FinGrid Engineering",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "handlebars": "^4.7.8",
+    "uuid": "^11.0.5",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.2",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
