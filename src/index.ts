@@ -7,7 +7,6 @@ import { templateRouter } from './routes/template.routes.js';
 import { bureauRouter } from './routes/bureau.routes.js';
 import { bsaRouter } from './routes/bsa.routes.js';
 import { taxRouter } from './routes/tax.routes.js';
-import { enachRouter } from './routes/enach.routes.js';
 import { TemplateLoader } from './engine/template-loader.js';
 
 const app = express();
@@ -37,7 +36,6 @@ app.use(`${config.apiPrefix}/templates`, templateRouter);
 app.use(`${config.apiPrefix}/bureau`, bureauRouter);
 app.use(`${config.apiPrefix}/bsa`, bsaRouter);
 app.use(`${config.apiPrefix}/tax`, taxRouter);
-app.use(`${config.apiPrefix}/enach`, enachRouter);
 
 // Start Server
 if (process.env.NODE_ENV !== 'test') {
