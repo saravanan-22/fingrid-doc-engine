@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bank Statement Analysis Report - {{borrowerName}}</title>
+  {{> styles }}
+</head>
+<body>
+  {{> watermark }}
+
+  <!-- PAGE 1: Executive Scorecard & Monthly Performance -->
+  <div class="page">
+    {{> header }}
+
+    <div class="doc-title-banner">
+      <div>
+        <div class="doc-title">INSTITUTIONAL BANK STATEMENT ANALYSIS</div>
+        <div class="doc-subtitle">Borrower: <strong>{{borrowerName}}</strong> • Account: {{bsa.bankName}} ({{bsa.accountNumberMasked}})</div>
+      </div>
+      <div>
+        <span class="status-pill {{#if (eq bsa.underwritingDecision 'APPROVE')}}success{{else if (eq bsa.underwritingDecision 'REJECT')}}text-red-600{{else}}warning{{/if}}" style="font-size: 9pt; padding: 4px 12px;">
+          GRADE {{bsa.bankingHealthGrade}} ({{bsa.overallScorePercent}}%)
+        </span>
+      </div>
+    </div>
+
+    <!-- 1. Executive Banking Scorecard -->
+    <div class="section-block">
+      <div class="section-title">1. Executive Banking Scorecard</div>
+      <div class="grid-4">
+        <div class="kv-card">
+          <div class="kv-label">Annualized Turnover</div>
+          <div class="kv-value highlight">{{formatINR bsa.annualizedTurnover}}</div>
+          <div class="doc-subtitle mt-1">Total Credits: {{formatINR bsa.totalBankingTurnover}}</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Average Monthly Balance (AMB)</div>
+          <div class="kv-value highlight">{{formatINR bsa.averageMonthlyBalance}}</div>
+          <div class="doc-subtitle mt-1">Lowest Month: {{formatINR bsa.lowestMonthlyBalance}}</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Outward / Inward Bounces</div>
+          <div class="kv-value {{#if (eq bsa.outwardChequeBounces 0)}}text-green-600{{else}}text-red-600{{/if}}">
+            {{bsa.outwardChequeBounces}} Outward / {{bsa.inwardChequeBounces}} Inward
+          </div>
+          <div class="doc-subtitle mt-1">Bounce Ratio: {{bsa.bounceRatioPercent}}%</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Credit to Debit Ratio</div>
+          <div class="kv-value {{#if (gte bsa.creditToDebitRatio 1.0)}}text-green-600{{else}}text-red-600{{/if}}">
+            {{bsa.creditToDebitRatio}}x
+          </div>
+          <div class="doc-subtitle mt-1">Period: {{bsa.monthsAnalyzed}} Months</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Month-on-Month Performance Grid -->
+    <div class="section-block">
+      <div class="section-title">2. Month-on-Month Performance & Liquidity Progression</div>
+      <table class="fin-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th class="text-right">Total Inflow</th>
+            <th class="text-right">Total Outflow</th>
+            <th class="text-right">Net Turnover</th>
+            <th class="text-right">AMB / ABB</th>
+            <th class="text-right">Lowest Bal</th>
+            <th class="text-center">Inward Rtns</th>
+            <th class="text-center">Outward Bnc</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each bsa.monthlyBreakdown}}
+          <tr>
+            <td><strong>{{this.month}}</strong></td>
+            <td class="text-right num-font">{{formatINR this.totalCredits}}</td>
+            <td class="text-right num-font">{{formatINR this.totalDebits}}</td>
+            <td class="text-right num-font font-bold">{{formatINR this.netTurnover}}</td>
+            <td class="text-right num-font font-bold text-green-600">{{formatINR this.averageBalance}}</td>
+            <td class="text-right num-font">{{formatINR this.lowestBalance}}</td>
+            <td class="text-center">{{this.inwardBounceCount}}</td>
+            <td class="text-center {{#if (gt this.outwardBounceCount 0)}}text-red-600 font-bold{{/if}}">
+              {{this.outwardBounceCount}}
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. EOD Milestone Balances Grid -->
+    <div class="section-block">
+      <div class="section-title">3. End-of-Day (EOD) Milestone Balances (Key Clearing Cycles)</div>
+      <table class="fin-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th class="text-right">5th of Month</th>
+            <th class="text-right">10th (Prime EMI Day)</th>
+            <th class="text-right">15th of Month</th>
+            <th class="text-right">20th of Month</th>
+            <th class="text-right">25th of Month</th>
+            <th class="text-right">Month-End</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each bsa.monthlyBreakdown}}
+          <tr>
+            <td><strong>{{this.month}}</strong></td>
+            <td class="text-right num-font">{{formatINR this.eodMilestones.day5}}</td>
+            <td class="text-right num-font font-bold text-green-600">{{formatINR this.eodMilestones.day10}}</td>
+            <td class="text-right num-font">{{formatINR this.eodMilestones.day15}}</td>
+            <td class="text-right num-font">{{formatINR this.eodMilestones.day20}}</td>
+            <td class="text-right num-font">{{formatINR this.eodMilestones.day25}}</td>
+            <td class="text-right num-font font-bold">{{formatINR this.eodMilestones.monthEnd}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    {{> footer }}
+  </div>
+
+  <!-- PAGE 2: Banking DPD, Counterparty & Underwriting Decision -->
+  <div class="page page-break">
+    {{> header }}
+
+    <!-- 4. Banking DPD & Overdrawn Days -->
+    <div class="section-block">
+      <div class="section-title">4. Banking DPD & Delinquency Tracking</div>
+      <div class="grid-3 mb-3">
+        <div class="kv-card">
+          <div class="kv-label">Negative Balance / Overdrawn Days</div>
+          <div class="kv-value {{#if (eq bsa.forensics.negativeBalanceDaysTotal 0)}}text-green-600{{else}}text-red-600{{/if}}">
+            {{bsa.forensics.negativeBalanceDaysTotal}} Days
+          </div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Cash Inflow Intensity</div>
+          <div class="kv-value">{{bsa.cashDepositRatioPercent}}% of Credits</div>
+        </div>
+        <div class="kv-card">
+          <div class="kv-label">Cash Outflow Intensity</div>
+          <div class="kv-value">{{bsa.cashWithdrawalRatioPercent}}% of Debits</div>
+        </div>
+      </div>
+
+      {{#if bsa.detailedBounceEvents.length}}
+      <table class="fin-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Narration / Instrument Details</th>
+            <th class="text-right">Amount</th>
+            <th>Return Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each bsa.detailedBounceEvents}}
+          <tr>
+            <td class="num-font">{{formatDate this.date}}</td>
+            <td>
+              <span class="status-pill {{#if (eq this.bounceType 'OUTWARD')}}text-red-600{{else}}warning{{/if}}">
+                {{this.bounceType}}
+              </span>
+            </td>
+            <td>{{this.narration}}</td>
+            <td class="text-right num-font text-red-600 font-bold">{{formatINR this.amount}}</td>
+            <td>{{this.reason}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{else}}
+      <div class="callout-box" style="background: #f0fdf4; border-left-color: #22c55e;">
+        <strong>Clean Banking Track Record:</strong> No inward or outward cheque/mandate returns detected across {{bsa.monthsAnalyzed}} months.
+      </div>
+      {{/if}}
+    </div>
+
+    <!-- 5. Discovered Ongoing Loans & EMIs -->
+    {{#if bsa.discoveredActiveLoans.length}}
+    <div class="section-block">
+      <div class="section-title">5. Discovered Ongoing Loans & EMI Schedules</div>
+      <table class="fin-table">
+        <thead>
+          <tr>
+            <th>Lender / Financial Institution</th>
+            <th>Inferred Loan Type</th>
+            <th class="text-center">Deduction Day</th>
+            <th class="text-right">Monthly EMI Amount</th>
+            <th class="text-right">Total Paid (Period)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each bsa.discoveredActiveLoans}}
+          <tr>
+            <td><strong>{{this.lenderPattern}}</strong></td>
+            <td>{{this.loanTypeGuessed}}</td>
+            <td class="text-center num-font">{{this.deductionDayOfMonth}}th</td>
+            <td class="text-right num-font font-bold text-red-600">{{formatINR this.approximateEmiAmount}}</td>
+            <td class="text-right num-font">{{formatINR this.totalPaid}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/if}}
+
+    <!-- 6. Counterparty Concentration (Top Creditors & Debtors) -->
+    <div class="section-block">
+      <div class="section-title">6. Counterparty Concentration Analysis</div>
+      <div class="grid-2">
+        <div>
+          <div class="doc-subtitle font-bold mb-2">TOP 5 CREDITOR INFLOWS</div>
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th>Customer / Remitter</th>
+                <th class="text-right">Volume</th>
+                <th class="text-right">% Share</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each bsa.topCreditors}}
+              <tr>
+                <td>{{this.name}}</td>
+                <td class="text-right num-font">{{formatINR this.totalAmount}}</td>
+                <td class="text-right num-font font-bold">{{this.percentageOfTotal}}%</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <div class="doc-subtitle font-bold mb-2">TOP 5 DEBTOR OUTFLOWS</div>
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th>Vendor / Destination</th>
+                <th class="text-right">Volume</th>
+                <th class="text-right">% Share</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each bsa.topDebtors}}
+              <tr>
+                <td>{{this.name}}</td>
+                <td class="text-right num-font">{{formatINR this.totalAmount}}</td>
+                <td class="text-right num-font font-bold">{{this.percentageOfTotal}}%</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Underwriting Recommendation & Sign-off Block -->
+    <div class="section-block no-break mt-6">
+      <div class="section-title">7. Underwriting Recommendation & Sign-off</div>
+      <div class="callout-box {{#if (eq bsa.underwritingDecision 'APPROVE')}}info{{else}}warning{{/if}}">
+        <strong>Underwriter Decision: {{bsa.underwritingDecision}}</strong>
+        <ul style="padding-left: 18px; margin-top: 4px;">
+          {{#each bsa.decisionRationale}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+
+      <div class="signature-grid">
+        {{#each signers}}
+        <div class="esign-anchor-box" data-signer-id="{{this.id}}">
+          <div class="esign-badge">{{this.signatureType}}</div>
+          <span style="color: transparent; font-size: 1px;">[[sig:{{this.id}}:160:50]]</span>
+          <div class="official-seal-placeholder">Digital Seal</div>
+          <div class="esign-placeholder-line"></div>
+          <div class="esign-label">{{this.role}}</div>
+          <div class="doc-subtitle">{{this.name}}</div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    {{> footer }}
+  </div>
+</body>
+</html>

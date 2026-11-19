@@ -20,7 +20,13 @@ async function runE2EDemo() {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  const templatesToTest = ['cam-report', 'profit-and-loss', 'loan-closure', 'sanction-letter'];
+  const templatesToTest = [
+    'cam-report',
+    'profit-and-loss',
+    'loan-closure',
+    'sanction-letter',
+    'bank-analysis-report',
+  ];
 
   console.log('--- TEST STEP 1: DYNAMIC DOCUMENT GENERATION ---');
   for (const templateId of templatesToTest) {

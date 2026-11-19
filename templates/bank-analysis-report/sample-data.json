@@ -1,0 +1,246 @@
+{
+  "borrowerName": "Apex Precision Engineering Pvt Ltd",
+  "applicationId": "CAM-2026-FNG-9821",
+  "bsa": {
+    "bankName": "HDFC Bank Ltd",
+    "accountNumberMasked": "XXXXXX9012",
+    "accountType": "CURRENT",
+    "currency": "INR",
+    "statementPeriodStart": "2026-06-03",
+    "statementPeriodEnd": "2026-11-28",
+    "monthsAnalyzed": 6,
+    "bankingHealthGrade": "A+",
+    "overallScorePercent": 94,
+    "totalBankingTurnover": 32820000,
+    "annualizedTurnover": 65640000,
+    "averageMonthlyBalance": 4310500,
+    "highestMonthlyBalance": 8920000,
+    "lowestMonthlyBalance": 1820000,
+    "creditToDebitRatio": 1.28,
+    "inwardChequeBounces": 0,
+    "outwardChequeBounces": 0,
+    "bounceRatioPercent": 0,
+    "cleanBankingFlag": true,
+    "detailedBounceEvents": [],
+    "cashDepositRatioPercent": 0.0,
+    "cashWithdrawalRatioPercent": 1.8,
+    "totalEmiDebits": 1962000,
+    "discoveredActiveLoans": [
+      {
+        "lenderPattern": "Tata Capital Financial Services",
+        "loanTypeGuessed": "Machinery Term Loan",
+        "approximateEmiAmount": 185000,
+        "deductionDayOfMonth": 10,
+        "frequencyMonths": 6,
+        "totalPaid": 1110000
+      },
+      {
+        "lenderPattern": "Bajaj Finance Limited",
+        "loanTypeGuessed": "Business Working Capital Loan",
+        "approximateEmiAmount": 142000,
+        "deductionDayOfMonth": 12,
+        "frequencyMonths": 6,
+        "totalPaid": 852000
+      }
+    ],
+    "topCreditors": [
+      {
+        "name": "L&T Defence Systems Ltd",
+        "totalAmount": 19200000,
+        "transactionCount": 6,
+        "percentageOfTotal": 58.5
+      },
+      {
+        "name": "Apex Forgings Aerospace",
+        "totalAmount": 11100000,
+        "transactionCount": 6,
+        "percentageOfTotal": 33.8
+      },
+      {
+        "name": "Paytm Merchant Collections",
+        "totalAmount": 2520000,
+        "transactionCount": 6,
+        "percentageOfTotal": 7.7
+      }
+    ],
+    "topDebtors": [
+      {
+        "name": "Tata Steel Limited (Raw Coils)",
+        "totalAmount": 12600000,
+        "transactionCount": 6,
+        "percentageOfTotal": 49.2
+      },
+      {
+        "name": "Maharashtra GST Portal",
+        "totalAmount": 2880000,
+        "transactionCount": 6,
+        "percentageOfTotal": 11.2
+      },
+      {
+        "name": "Tata Capital (Loan EMI)",
+        "totalAmount": 1110000,
+        "transactionCount": 6,
+        "percentageOfTotal": 4.3
+      },
+      {
+        "name": "Bajaj Finance (Loan EMI)",
+        "totalAmount": 852000,
+        "transactionCount": 6,
+        "percentageOfTotal": 3.3
+      },
+      {
+        "name": "Factory Petty Cash WDL",
+        "totalAmount": 300000,
+        "transactionCount": 6,
+        "percentageOfTotal": 1.2
+      }
+    ],
+    "monthlyBreakdown": [
+      {
+        "month": "2026-06",
+        "totalCredits": 5470000,
+        "totalDebits": 2957000,
+        "netTurnover": 5470000,
+        "averageBalance": 4210000,
+        "highestBalance": 7450000,
+        "lowestBalance": 2100000,
+        "inwardBounceCount": 0,
+        "outwardBounceCount": 0,
+        "eodMilestones": {
+          "day5": 6100000,
+          "day10": 5915000,
+          "day15": 5773000,
+          "day20": 3673000,
+          "day25": 4093000,
+          "monthEnd": 4043000
+        }
+      },
+      {
+        "month": "2026-07",
+        "totalCredits": 5470000,
+        "totalDebits": 2957000,
+        "netTurnover": 5470000,
+        "averageBalance": 4350000,
+        "highestBalance": 7650000,
+        "lowestBalance": 2350000,
+        "inwardBounceCount": 0,
+        "outwardBounceCount": 0,
+        "eodMilestones": {
+          "day5": 5893000,
+          "day10": 5708000,
+          "day15": 5566000,
+          "day20": 3466000,
+          "day25": 3886000,
+          "monthEnd": 3836000
+        }
+      },
+      {
+        "month": "2026-08",
+        "totalCredits": 5470000,
+        "totalDebits": 2957000,
+        "netTurnover": 5470000,
+        "averageBalance": 4280000,
+        "highestBalance": 7780000,
+        "lowestBalance": 2210000,
+        "inwardBounceCount": 0,
+        "outwardBounceCount": 0,
+        "eodMilestones": {
+          "day5": 5686000,
+          "day10": 5501000,
+          "day15": 5359000,
+          "day20": 3259000,
+          "day25": 3679000,
+          "monthEnd": 3629000
+        }
+      },
+      {
+        "month": "2026-09",
+        "totalCredits": 5470000,
+        "totalDebits": 2957000,
+        "netTurnover": 5470000,
+        "averageBalance": 4390000,
+        "highestBalance": 7920000,
+        "lowestBalance": 2400000,
+        "inwardBounceCount": 0,
+        "outwardBounceCount": 0,
+        "eodMilestones": {
+          "day5": 5479000,
+          "day10": 5294000,
+          "day15": 5152000,
+          "day20": 3052000,
+          "day25": 3472000,
+          "monthEnd": 3422000
+        }
+      },
+      {
+        "month": "2026-10",
+        "totalCredits": 5470000,
+        "totalDebits": 2957000,
+        "netTurnover": 5470000,
+        "averageBalance": 4320000,
+        "highestBalance": 8100000,
+        "lowestBalance": 2150000,
+        "inwardBounceCount": 0,
+        "outwardBounceCount": 0,
+        "eodMilestones": {
+          "day5": 5272000,
+          "day10": 5087000,
+          "day15": 4945000,
+          "day20": 2845000,
+          "day25": 3265000,
+          "monthEnd": 3215000
+        }
+      },
+      {
+        "month": "2026-11",
+        "totalCredits": 5470000,
+        "totalDebits": 2957000,
+        "netTurnover": 5470000,
+        "averageBalance": 4410000,
+        "highestBalance": 8450000,
+        "lowestBalance": 2500000,
+        "inwardBounceCount": 0,
+        "outwardBounceCount": 0,
+        "eodMilestones": {
+          "day5": 5065000,
+          "day10": 4880000,
+          "day15": 4738000,
+          "day20": 2638000,
+          "day25": 3058000,
+          "monthEnd": 3008000
+        }
+      }
+    ],
+    "forensics": {
+      "circularTransactionsFlag": false,
+      "highCashRatioFlag": false,
+      "decliningAmbTrendFlag": false,
+      "sameDayCreditDebitChurnRatio": 0.12,
+      "volatilityScore": "LOW",
+      "negativeBalanceDaysTotal": 0,
+      "totalDaysAnalyzed": 180
+    },
+    "underwritingDecision": "APPROVE",
+    "decisionRationale": [
+      "Grade A+ Prime Banking Conduct: Zero outward cheque/NACH returns across 6 months.",
+      "Robust liquidity cushion: Average Monthly Balance (AMB) maintained at ₹43.10 Lakhs.",
+      "Clear operational cash flows with strong debtor coverage (credit/debit ratio of 1.28x)."
+    ]
+  },
+  "signers": [
+    {
+      "id": "senior_credit_underwriter",
+      "name": "Nandita Iyer (Chief Credit Underwriter)",
+      "role": "SENIOR CREDIT UNDERWRITER",
+      "email": "nandita.iyer@fingrid.example.com",
+      "signatureType": "DSC"
+    },
+    {
+      "id": "head_of_risk",
+      "name": "Meera Swaminathan",
+      "role": "HEAD OF CREDIT RISK",
+      "email": "meera.risk@fingrid.example.com",
+      "signatureType": "AADHAAR_ESIGN"
+    }
+  ]
+}
