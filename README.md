@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/badge/FinGrid-Flagship_Project-1e3a8a?style=for-the-badge&logo=shield&logoColor=white" alt="FinGrid Flagship" />
   <img src="https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Node.js-22+-green?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/Tests-29%2F29_Passing-brightgreen?style=for-the-badge&logo=vitest&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-41%2F41_Passing-brightgreen?style=for-the-badge&logo=vitest&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-Apache_2.0-orange?style=for-the-badge" alt="License" />
 </p>
 
@@ -26,22 +26,22 @@ In financial lending operations, platforms typically pay hundreds of thousands o
 **FinGrid Document & Underwriting Engine unifies all five pillars into a single self-hosted microservice:**
 
 ```
-┌───────────────────────────────────────────────────────────────────────────────────────┐
-│                           FINGRID UNIFIED UNDERWRITING ENGINE                         │
-└───────────────────────────────────────────┬───────────────────────────────────────────┘
-                                            │
-        ┌───────────────────┬───────────────┴───────────────┬───────────────────┐
-        ▼                   ▼                               ▼                   ▼
-┌───────────────┐   ┌───────────────┐               ┌───────────────┐   ┌───────────────┐
-│ Dynamic Docs  │   │  Multi-Party  │               │ In-House BSA  │   │ Bureau & Tax  │
-│  & PDF Engine │   │ eSign Gateway │               │ (Glib AI Alt) │   │ Triangulation │
-├───────────────┤   ├───────────────┤               ├───────────────┤   ├───────────────┤
-│• CAM Reports  │   │• Aadhaar eSign│               │• AMB / ABB    │   │• CIBIL & Exp  │
-│• P&L Extracts │   │• Digio API    │               │• Outward Bnc  │   │• 36-Month DPD │
-│• Loan Closure │   │• Leegality    │               │• EOD Balances │   │• GSTR-3B (3.1)│
-│• KFS Sanction │   │• DocuSign     │               │• Loan Detect  │   │• ITR (3-Yr)   │
-│• Print CSS @pg│   │• Mock Dev Sim │               │• Top Debtors  │   │• 3-Way Recon  │
-└───────────────┘   └───────────────┘               └───────────────┘   └───────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   FINGRID UNIFIED UNDERWRITING ENGINE                                  │
+└───────────────────────────────────────────────────┬────────────────────────────────────────────────────┘
+                                                    │
+        ┌───────────────────┬───────────────────────┼───────────────────────┬───────────────────┐
+        ▼                   ▼                       ▼                       ▼                   ▼
+┌───────────────┐   ┌───────────────┐       ┌───────────────┐       ┌───────────────┐   ┌───────────────┐
+│ Dynamic Docs  │   │  Multi-Party  │       │ In-House BSA  │       │ Bureau & Tax  │   │ eNACH & Auto  │
+│  & PDF Engine │   │ eSign Gateway │       │ (Glib AI Alt) │       │ Triangulation │   │ Repay Mandate │
+├───────────────┤   ├───────────────┤       ├───────────────┤       ├───────────────┤   ├───────────────┤
+│• CAM Reports  │   │• Aadhaar eSign│       │• AMB / ABB    │       │• CIBIL & Exp  │   │• NPCI ONMAGS  │
+│• P&L Extracts │   │• Digio API    │       │• Outward Bnc  │       │• 36-Month DPD │   │• 20-digit UMRN│
+│• Loan Closure │   │• Leegality    │       │• EOD Balances │       │• GSTR-3B (3.1)│   │• Net/Debit/UPI│
+│• KFS Sanction │   │• DocuSign     │       │• Loan Detect  │       │• ITR (3-Yr)   │   │• RBI 24h Alert│
+│• Print CSS @pg│   │• Mock Dev Sim │       │• Top Debtors  │       │• 3-Way Recon  │   │• AM04 Retries │
+└───────────────┘   └───────────────┘       └───────────────┘       └───────────────┘   └───────────────┘
 ```
 
 ---
@@ -158,6 +158,36 @@ npm run dev
 * `POST /api/v1/tax/itr/analyze` — 3-year ITR CAGR, cash accruals, Section 139 discipline.
 * `POST /api/v1/tax/gstr3b/analyze` — 12-month GSTR-3B outward supplies & cash tax ratio.
 * `POST /api/v1/tax/triangulate` — Reconcile Banking vs GST vs ITR to detect circular turnover.
+
+### 6. eNACH & e-Mandate System (NPCI Repayment Automation)
+* `POST /api/v1/enach/mandates/initiate` — Initiate e-mandate registration with 1.5x EMI maximum cap.
+* `GET /api/v1/enach/mandates/:mandateId` — Fetch mandate record and NPCI UMRN status.
+* `POST /api/v1/enach/mandates/:mandateId/authenticate` — Authenticate via NetBanking, Debit Card, Aadhaar, or UPI AutoPay.
+* `POST /api/v1/enach/mandates/:mandateId/cancel` — Revoke mandate on NPCI ONMAGS.
+* `POST /api/v1/enach/notifications/send-pre-debit` — Dispatch RBI-compliant 24h pre-debit alert (SMS/Email).
+* `POST /api/v1/enach/presentations/single` — Present single EMI debit to clearing house.
+* `POST /api/v1/enach/presentations/batch` — Execute batch clearing run with settlement breakdown.
+* `POST /api/v1/enach/presentations/:presentationId/retry` — Schedule automated retry for returned debits (`AM04`).
+* `GET /api/v1/enach/mock-auth/:mandateId` — Interactive portal to test multi-mode authentication.
+
+---
+
+## 💳 eNACH Architecture & NPCI Clearing Cycle
+
+```
+[Borrower Onboarding] ──► [Mandate Initiation (1.5x EMI Cap)] ──► [Multi-Mode Auth (NetBanking/UPI)]
+                                                                               │
+                                                                               ▼
+[Clearing Settlement] ◄── [EMI Due Date Presentation] ◄── [RBI Mandatory 24h Pre-Debit Notice]
+         │
+         ├── SUCCESS  ──► Post to Loan Ledger (Installment Settled)
+         └── RETURNED ──► AM04 (Insufficient Funds) ──► Auto-Schedule Retry (T+3 Days)
+                      ──► AC01 (Account Closed)     ──► Trigger Re-Mandate Workflow
+```
+
+* **UMRN Issuance**: 20-digit unique mandate reference number issued upon customer authorization.
+* **RBI Recurring Compliance**: Strictly prevents clearing presentation without verified pre-debit SMS/Email notification dispatched $\ge$ 24 hours prior.
+* **Return Code Management**: Automated retry scheduler for `AM04` (Insufficient funds) and escalation workflows for `AC01` / `MD01`.
 
 ---
 
