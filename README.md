@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/badge/FinGrid-Flagship_Project-1e3a8a?style=for-the-badge&logo=shield&logoColor=white" alt="FinGrid Flagship" />
   <img src="https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Node.js-22+-green?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/Tests-29%2F29_Passing-brightgreen?style=for-the-badge&logo=vitest&logoColor=white" alt="Tests" />
+  <img src="https://img.shields.io/badge/Tests-30%2F30_Passing-brightgreen?style=for-the-badge&logo=vitest&logoColor=white" alt="Tests" />
   <img src="https://img.shields.io/badge/License-Apache_2.0-orange?style=for-the-badge" alt="License" />
 </p>
 
@@ -105,10 +105,10 @@ cd fingrid-doc-engine
 npm install
 ```
 
-### 2. Run All Tests (29/29 Passing)
+### 2. Run All Tests (30/30 Passing)
 ```bash
 npm test
-# ✔ Core Document Engine & Helpers (11 tests)
+# ✔ Core Document Engine, eSign & PDF (12 tests)
 # ✔ Bank Statement Analysis & DPD (7 tests)
 # ✔ ITR, GSTR-3B & Triangulation (6 tests)
 # ✔ Bureau Engine & Scoring (5 tests)
@@ -128,9 +128,15 @@ Generated reports are saved in `./output`:
 
 ### 4. Start the Microservice
 ```bash
+cp .env.example .env
+docker compose up -d gotenberg   # Chromium PDF renderer on :3000 (needed for real PDFs)
 npm run dev
 # Server running at http://localhost:4000/api/v1
 ```
+
+> **Without Gotenberg** the engine still works: `generate-pdf` returns the rendered HTML as an `.html` file with `"format": "html"` and a `warning` explaining why no PDF was produced.
+>
+> **eSign sessions** from the MOCK provider are saved to `ESIGN_SESSION_STORE` (default `./generated_docs/esign-sessions.json`), so in-progress signing ceremonies survive a server restart. Set it to `memory` to disable.
 
 ---
 
@@ -139,11 +145,14 @@ npm run dev
 ### 1. Document Generation
 * `GET /api/v1/templates` — List all discovered document templates.
 * `POST /api/v1/documents/render` — Render dynamic document HTML with anchor detection.
-* `POST /api/v1/documents/generate-pdf` — Render vector PDF via Gotenberg container.
+* `POST /api/v1/documents/generate-pdf` — Render vector PDF via Gotenberg container (falls back to HTML with a warning if Gotenberg is down).
+* `GET /api/v1/documents/:documentId/download` — Download a generated document (PDF, or the HTML fallback).
 
 ### 2. eSign Pipeline
 * `POST /api/v1/esign/initiate` — Create multi-party signing session (Aadhaar/DSC/DocuSign/Mock).
 * `GET /api/v1/esign/status/:esignId` — Check live signing progress across signers.
+* `GET /api/v1/esign/audit-trail/:esignId` — Signer timestamps and SHA-256 fingerprint of the signed document.
+* `GET /api/v1/esign/mock-sign/:esignId/:signerId` — (MOCK provider) Simulate a signer completing their signature.
 * `POST /api/v1/esign/webhook` — Webhook handler for tamper-proof audit trail.
 
 ### 3. Bank Statement Analysis (Glib.ai Replacement)

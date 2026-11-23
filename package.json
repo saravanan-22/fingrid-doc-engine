@@ -10,7 +10,7 @@
     "dev": "tsx watch src/index.ts",
     "cli:generate": "tsx src/cli.ts generate",
     "cli:esign": "tsx src/cli.ts esign",
-    "test": "node --test tests/**/*.test.js || tsx tests/engine.test.ts"
+    "test": "tsx --test tests/*.test.ts"
   },
   "keywords": [
     "fintech",

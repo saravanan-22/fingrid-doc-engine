@@ -60,7 +60,12 @@ async function main() {
 
     if (outFormat === 'pdf') {
       const pdf = await PdfGenerator.generateFromHtml(result.html, result.documentId);
-      console.log(`✓ Generated PDF saved to: ${pdf.filePath}`);
+      if (pdf.format === 'pdf') {
+        console.log(`✓ Generated PDF saved to: ${pdf.filePath}`);
+      } else {
+        console.warn(`⚠ PDF not generated: ${pdf.fallbackReason}`);
+        console.log(`✓ HTML fallback saved to: ${pdf.filePath} (start Gotenberg: docker compose up -d gotenberg)`);
+      }
     } else {
       fs.writeFileSync(outputFilename, result.html, 'utf-8');
       console.log(`✓ Generated HTML saved to: ${path.resolve(outputFilename)}`);

@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import { createHash } from 'crypto';
 import { EsignOrchestrator } from '../esign/orchestrator.js';
 import { MockEsignProvider } from '../esign/providers/mock.js';
 import { AnchorParser } from '../esign/anchor-parser.js';
@@ -62,6 +63,29 @@ esignRouter.get('/status/:esignId', async (req: Request, res: Response) => {
     res.json({ success: true, status });
   } catch (err) {
     res.status(500).json({ success: false, error: (err as Error).message });
+  }
+});
+
+/**
+ * Audit trail for an eSign workflow: who signed, when, and the document fingerprint
+ */
+esignRouter.get('/audit-trail/:esignId', async (req: Request, res: Response) => {
+  try {
+    const { esignId } = req.params;
+    const provider = orchestrator.getProvider();
+    const status = await provider.getSignatureStatus(esignId);
+    const signedDoc = await provider.downloadSignedDocument(esignId);
+    res.json({
+      success: true,
+      auditTrail: {
+        ...status,
+        provider: provider.providerName,
+        documentSha256: createHash('sha256').update(signedDoc).digest('hex'),
+        generatedAt: new Date().toISOString(),
+      },
+    });
+  } catch (err) {
+    res.status(404).json({ success: false, error: (err as Error).message });
   }
 });
 

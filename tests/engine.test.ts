@@ -11,6 +11,9 @@ import { TemplateLoader } from '../src/engine/template-loader.js';
 import { AnchorParser } from '../src/esign/anchor-parser.js';
 import { MockEsignProvider } from '../src/esign/providers/mock.js';
 import { EsignOrchestrator } from '../src/esign/orchestrator.js';
+import { PdfGenerator } from '../src/engine/pdf-generator.js';
+import { config } from '../src/config.js';
+import fs from 'node:fs';
 
 describe('FinGrid Document Engine - Core Test Suite', () => {
   describe('Financial Utility Helpers', () => {
@@ -157,6 +160,29 @@ describe('FinGrid Document Engine - Core Test Suite', () => {
       // Verify signed document download
       const signedDoc = await provider.downloadSignedDocument(resp.esignId);
       assert.ok(signedDoc.toString('utf-8').includes('FINGRID VERIFIED DIGITAL SIGNATURE'));
+
+      // Signing links use the configured public base URL, not a hard-coded port
+      assert.ok(resp.signers[0].signingUrl?.startsWith(`${config.publicBaseUrl}${config.apiPrefix}/esign/mock-sign/`));
+
+      // Sessions are persisted so they survive a server restart
+      if (config.esign.sessionStore) {
+        const stored = JSON.parse(fs.readFileSync(config.esign.sessionStore, 'utf-8'));
+        const saved = stored.find((x: { esignId: string }) => x.esignId === resp.esignId);
+        assert.ok(saved, 'session should be written to the session store');
+        assert.strictEqual(saved.status, 'SIGNED');
+        assert.strictEqual(Buffer.from(saved.buffer, 'base64').toString('utf-8'), '<html><body>Test Agreement</body></html>');
+      }
+    });
+  });
+
+  describe('PDF Generation', () => {
+    test('Falls back to an .html file (never HTML disguised as .pdf) when Gotenberg is unavailable', async () => {
+      const html = '<html><body>Fallback</body></html>';
+      const result = await PdfGenerator.generateFromHtml(html, 'DOC-TEST-FALLBACK', { preferGotenberg: false });
+      assert.strictEqual(result.format, 'html');
+      assert.ok(result.filePath.endsWith('DOC-TEST-FALLBACK.html'));
+      assert.ok(result.fallbackReason);
+      assert.strictEqual(fs.readFileSync(result.filePath, 'utf-8'), html);
     });
   });
 });
