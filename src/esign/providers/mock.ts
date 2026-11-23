@@ -7,6 +7,9 @@ import {
   ISignerInfo,
 } from '../types.js';
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import path from 'path';
+import { config } from '../../config.js';
 
 interface IMockSession {
   esignId: string;
@@ -21,7 +24,37 @@ interface IMockSession {
 
 export class MockEsignProvider extends BaseEsignProvider {
   readonly providerName = 'MOCK';
-  private static sessions: Map<string, IMockSession> = new Map();
+  private static loadedSessions: Map<string, IMockSession> | null = null;
+
+  /** Sessions are lazily loaded from the JSON store on first access. */
+  private static get sessions(): Map<string, IMockSession> {
+    if (!this.loadedSessions) {
+      this.loadedSessions = new Map();
+      const file = config.esign.sessionStore;
+      if (file && fs.existsSync(file)) {
+        try {
+          const raw = JSON.parse(fs.readFileSync(file, 'utf-8')) as Array<Omit<IMockSession, 'buffer'> & { buffer: string }>;
+          for (const s of raw) {
+            this.loadedSessions.set(s.esignId, { ...s, buffer: Buffer.from(s.buffer, 'base64') });
+          }
+        } catch (err) {
+          console.warn(`Could not load eSign session store ${file}: ${(err as Error).message}. Starting empty.`);
+        }
+      }
+    }
+    return this.loadedSessions;
+  }
+
+  /** Write all sessions to the JSON store (atomic rename so a crash never leaves a half-written file). */
+  private static persist(): void {
+    const file = config.esign.sessionStore;
+    if (!file) return;
+    const data = [...this.sessions.values()].map(s => ({ ...s, buffer: s.buffer.toString('base64') }));
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    const tmp = `${file}.tmp`;
+    fs.writeFileSync(tmp, JSON.stringify(data), 'utf-8');
+    fs.renameSync(tmp, file);
+  }
 
   async createSignatureRequest(request: IEsignDocumentRequest): Promise<IEsignDocumentResponse> {
     const esignId = `MOCK-ESIGN-${uuidv4().substring(0, 8).toUpperCase()}`;
@@ -31,7 +64,7 @@ export class MockEsignProvider extends BaseEsignProvider {
     const signersWithUrls: ISignerInfo[] = request.signers.map(s => ({
       ...s,
       status: 'PENDING',
-      signingUrl: `http://localhost:4000/api/v1/esign/mock-sign/${esignId}/${s.id}`,
+      signingUrl: `${config.publicBaseUrl}${config.apiPrefix}/esign/mock-sign/${esignId}/${s.id}`,
     }));
 
     const session: IMockSession = {
@@ -46,6 +79,7 @@ export class MockEsignProvider extends BaseEsignProvider {
     };
 
     MockEsignProvider.sessions.set(esignId, session);
+    MockEsignProvider.persist();
 
     return {
       esignId,
@@ -55,7 +89,7 @@ export class MockEsignProvider extends BaseEsignProvider {
       createdAt,
       expiresAt,
       provider: 'MOCK',
-      auditCertificateUrl: `http://localhost:4000/api/v1/esign/audit-trail/${esignId}`,
+      auditCertificateUrl: `${config.publicBaseUrl}${config.apiPrefix}/esign/audit-trail/${esignId}`,
     };
   }
 
@@ -117,6 +151,7 @@ export class MockEsignProvider extends BaseEsignProvider {
 
     const allSigned = session.signers.every(s => s.status === 'SIGNED');
     session.status = allSigned ? 'SIGNED' : 'PARTIALLY_SIGNED';
+    this.persist();
 
     return session;
   }

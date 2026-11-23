@@ -7,6 +7,8 @@ export const config = {
   port: parseInt(process.env.PORT || '4000', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
   apiPrefix: process.env.API_PREFIX || '/api/v1',
+  // Public base URL used to build signing / audit links (defaults to this server on localhost)
+  publicBaseUrl: (process.env.PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || '4000'}`).replace(/\/$/, ''),
 
   templatesDir: path.resolve(process.env.TEMPLATES_DIR || './templates'),
   outputDir: path.resolve(process.env.OUTPUT_DIR || './generated_docs'),
@@ -16,6 +18,10 @@ export const config = {
   esign: {
     provider: (process.env.ESIGN_PROVIDER || 'MOCK').toUpperCase() as 'MOCK' | 'DIGIO' | 'LEEGALITY' | 'DOCUSIGN',
     webhookSecret: process.env.WEBHOOK_SIGNING_SECRET || 'fingrid_webhook_secret_dev_key',
+    // File that persists MOCK eSign sessions across restarts. Set to "memory" to disable persistence.
+    sessionStore: process.env.ESIGN_SESSION_STORE === 'memory'
+      ? null
+      : path.resolve(process.env.ESIGN_SESSION_STORE || path.join(process.env.OUTPUT_DIR || './generated_docs', 'esign-sessions.json')),
 
     digio: {
       clientId: process.env.DIGIO_CLIENT_ID || '',
